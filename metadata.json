@@ -1,0 +1,6 @@
+{
+  "name": "EduChallenge Grade 12",
+  "description": "Grade 12 Educational Gamified Learning & Quiz Platform for Kurdistan Students with Subjects, Leaderboard, Daily Streak, Challenges, and AI Tutor",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

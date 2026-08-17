@@ -1,0 +1,187 @@
+@import "tailwindcss";
+
+html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(139, 92, 246, 0.5) #090a16;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  overflow: visible !important;
+  background-color: #090a16;
+}
+
+#root {
+  min-height: 100vh;
+  width: 100%;
+  overflow: visible !important;
+}
+
+@layer utilities {
+  /* Glassmorphism Cards & Panels */
+  .glass-card {
+    background: rgba(22, 24, 52, 0.65);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(139, 92, 246, 0.22);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+  }
+
+  .glass-card-hover {
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .glass-card-hover:hover {
+    background: rgba(30, 32, 68, 0.8);
+    border-color: rgba(168, 85, 247, 0.45);
+    box-shadow: 0 14px 40px -10px rgba(124, 58, 237, 0.25), inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+  }
+
+  /* Purple Gradient Theme */
+  .bg-purple-gradient {
+    background: linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%);
+  }
+
+  .text-purple-gradient {
+    background: linear-gradient(135deg, #C084FC 0%, #818CF8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .purple-glow {
+    box-shadow: 0 0 25px -5px rgba(124, 58, 237, 0.4);
+  }
+
+  /* Custom Rounded Corners (20px - 36px) */
+  .rounded-apple {
+    border-radius: 22px;
+  }
+
+  .rounded-apple-lg {
+    border-radius: 28px;
+  }
+
+  .rounded-mastery {
+    border-radius: 32px;
+  }
+
+  .rounded-mastery-lg {
+    border-radius: 36px;
+  }
+
+  /* Mastery Hub Pastel Styles */
+  .highlighter-yellow {
+    background-color: #ffea79;
+    color: #0f172a;
+    font-weight: 900;
+    padding: 2px 12px;
+    border-radius: 12px;
+    display: inline-block;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .pastel-banner-gradient {
+    background: linear-gradient(135deg, #dfa2ff 0%, #d28eff 50%, #c477ff 100%);
+  }
+
+  .pastel-card-lavender {
+    background-color: #e8dfff;
+    border: 1px solid rgba(192, 168, 255, 0.6);
+  }
+
+  .pastel-card-yellow {
+    background-color: #fef4ba;
+    border: 1px solid rgba(254, 230, 133, 0.8);
+  }
+}
+
+/* Custom Skeleton Loader Animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-box {
+  background: linear-gradient(90deg, #1e2044 25%, #2a2d5e 37%, #1e2044 63%);
+  background-size: 200% 100%;
+  animation: shimmer 1.8s infinite ease-in-out;
+}
+
+/* Hide scrollbar for clean horizontal scrolling */
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar,
+  .scrollbar-none::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+  .no-scrollbar,
+  .scrollbar-none {
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
+  }
+}
+
+/* Custom Modern Minimalist Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #090a16;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.5);
+  border-radius: 9999px;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(168, 85, 247, 0.6);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Light Page White Scrollbar */
+.quiz-light-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.quiz-light-scrollbar::-webkit-scrollbar-track {
+  background: #f8f6fe;
+}
+
+.quiz-light-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(147, 51, 234, 0.35);
+  border-radius: 9999px;
+}
+
+.quiz-light-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(147, 51, 234, 0.6);
+}
+
+.quiz-light-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(147, 51, 234, 0.35) #f8f6fe;
+}
+
+
+
