@@ -79,7 +79,7 @@ CRITICAL INSTRUCTIONS ON RESPONSE LENGTH AND FORMAT:
    - Include relevant formulas and a short exam tip (تێبینیی وزاری) only if relevant.`;
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-3.6-flash",
       contents: prompt,
     });
 
@@ -137,7 +137,7 @@ Return ONLY a valid JSON array of objects with this structure:
 ]`;
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-3.6-flash",
       contents: prompt,
     });
 
