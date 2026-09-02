@@ -153,9 +153,9 @@ export const uiTranslations = {
     en: "Daily Challenge"
   },
   subjects: {
-    ku: "بابەتەکان",
-    badini: "بابەتێن پۆلا ۱۲",
-    en: "Subjects"
+    ku: "شرۆڤەی وانەکان",
+    badini: "شرۆڤەکرنا وانەیان",
+    en: "Lesson Explanations"
   },
   questionsCountLabel: {
     ku: "پرسیار",

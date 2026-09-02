@@ -24,9 +24,15 @@ import {
   Search,
   Award,
   BookCheck,
-  HelpCircle
+  HelpCircle,
+  Video,
+  Volume2,
+  X,
+  PlayCircle,
+  Maximize2,
+  Minimize2
 } from "lucide-react";
-import { Language, Subject } from "../types";
+import { Language, Subject, UserProfile } from "../types";
 import { getLocalizedText } from "../utils/i18n";
 
 import mathMascot from "../assets/images/math_mascot_1785970327866.jpg";
@@ -1108,6 +1114,8 @@ interface SubjectDetailViewProps {
   userName?: string;
   onBack: () => void;
   onStartQuiz: (chapterTitle: string) => void;
+  user?: UserProfile;
+  onOpenAiTutor?: () => void;
 }
 
 interface MapNode {
@@ -1130,8 +1138,30 @@ export const SubjectDetailView: React.FC<SubjectDetailViewProps> = ({
   language,
   userName,
   onBack,
-  onStartQuiz
+  onStartQuiz,
+  user,
+  onOpenAiTutor
 }) => {
+  const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().then(() => setIsFullscreen(true)).catch(() => setIsFullscreen(true));
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen().then(() => setIsFullscreen(false)).catch(() => setIsFullscreen(false));
+      }
+    }
+  };
+
+  useEffect(() => {
+    const handleFsChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener("fullscreenchange", handleFsChange);
+    return () => document.removeEventListener("fullscreenchange", handleFsChange);
+  }, []);
+
   const [activeSeason, setActiveSeason] = useState<1 | 2>(1);
   const [selectedNode, setSelectedNode] = useState<MapNode | null>(null);
   const [duoNodeId, setDuoNodeId] = useState<number>(2);
@@ -1142,6 +1172,20 @@ export const SubjectDetailView: React.FC<SubjectDetailViewProps> = ({
   const [giftClaimed, setGiftClaimed] = useState<boolean>(false);
   const [examViewTab, setExamViewTab] = useState<"years" | "chapters" | "quick">("years");
   const [selectedYearFilter, setSelectedYearFilter] = useState<string>("all");
+  const [mainViewMode, setMainViewMode] = useState<"explanations" | "map">("explanations");
+  const [selectedVideoLesson, setSelectedVideoLesson] = useState<{
+    title: string;
+    chapterTitle: string;
+    teacher: string;
+    duration: string;
+    videoUrl?: string;
+  } | null>(null);
+  const [selectedSummaryLesson, setSelectedSummaryLesson] = useState<{
+    title: string;
+    chapterTitle: string;
+    summaryPoints: string[];
+  } | null>(null);
+  const [activeAudioLesson, setActiveAudioLesson] = useState<string | null>(null);
 
   const handleOpenRoadGift = () => {
     setIsGiftOpening(true);
@@ -1878,7 +1922,7 @@ export const SubjectDetailView: React.FC<SubjectDetailViewProps> = ({
                     <span className="text-purple-600 text-xs sm:text-sm font-bold">({language === "badini" || language === "ku" ? config.titleEn : config.titleKu})</span>
                   </h1>
                   <p className="text-[10px] sm:text-[11px] font-semibold text-purple-600">
-                    {language === "badini" ? "نەخشەیێن خواندنێ و تاقیکرنێن وزاری" : "نەخشەی خوێندن و تاقیکردنەوەکان"}
+                    {language === "badini" ? "شرۆڤەکرنا هویر یا وانەیان و تاقیکرنێن وزاری" : "شرۆڤەکردنی وردی وانەکان و تاقیکردنەوەی وزاری"}
                   </p>
                 </div>
               </div>
@@ -1917,49 +1961,407 @@ export const SubjectDetailView: React.FC<SubjectDetailViewProps> = ({
                 <span className="text-xs sm:text-sm font-black text-slate-900 font-mono">320</span>
                 <span className="text-[10px] font-black text-cyan-700 bg-cyan-100 px-1 py-0.2 rounded border border-cyan-300">+</span>
               </div>
+
+              {/* Fullscreen Toggle Button */}
+              <button
+                onClick={toggleFullscreen}
+                className="px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-700 flex items-center gap-1.5 shadow-sm transition active:scale-95 text-xs font-black"
+                title={language === "badini" ? "کامل شاشە" : language === "ku" ? "تەواوی شاشە" : "Fullscreen"}
+              >
+                {isFullscreen ? <Minimize2 className="w-4 h-4 text-purple-600" /> : <Maximize2 className="w-4 h-4 text-purple-600" />}
+                <span className="hidden sm:inline">
+                  {isFullscreen
+                    ? (language === "badini" ? "شاشا ئاسایی" : "ئاسایی")
+                    : (language === "badini" ? "کامل شاشە" : language === "ku" ? "تەواوی شاشە" : "Fullscreen")}
+                </span>
+              </button>
             </div>
           </header>
 
-          {/* Seasons Strip */}
-          <div className="flex items-center gap-2 px-3 sm:px-6 py-1.5 bg-slate-50/80 border-t border-purple-100/60 w-full overflow-x-auto">
-            <button
-              onClick={() => setActiveSeason(1)}
-              className={`px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-xl font-black text-xs transition-all duration-300 shadow-sm active:scale-95 flex items-center gap-1.5 sm:gap-2 shrink-0 ${
-                activeSeason === 1
-                  ? "bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-600 text-white border border-purple-400/50 shadow-purple-600/30"
-                  : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 hover:text-slate-900"
-              }`}
-            >
-              <Sparkles className="w-3.5 h-3.5 text-purple-200" />
-              <span>{language === "badini" ? "وەرزێ ١" : language === "ku" ? "وەرزێ ١" : "Season 1"}</span>
-              <span className="text-[10px] sm:text-[11px] opacity-80 font-normal">
-                ({language === "badini" ? "٢٢ وانە" : language === "ku" ? "٢٢ وانە" : "22 Lessons"})
-              </span>
-            </button>
+          {/* Mode Switcher & Seasons Strip */}
+          <div className="flex flex-wrap items-center justify-between gap-2.5 px-3 sm:px-6 py-2 bg-slate-50/90 border-t border-purple-100/60 w-full">
+            {/* View Mode Toggle */}
+            <div className="flex items-center gap-1 bg-purple-100/70 p-1 rounded-2xl border border-purple-200/60">
+              <button
+                onClick={() => setMainViewMode("explanations")}
+                className={`px-3 sm:px-4 py-1.5 rounded-xl font-black text-xs transition-all flex items-center gap-1.5 ${
+                  mainViewMode === "explanations"
+                    ? "bg-purple-600 text-white shadow-md shadow-purple-600/25"
+                    : "text-slate-600 hover:text-slate-900"
+                }`}
+              >
+                <Video className="w-3.5 h-3.5" />
+                <span>{language === "badini" ? "شرۆڤەکرنا وانەیان 🎬" : language === "ku" ? "شرۆڤەی وانەکان 🎬" : "Lesson Explanations 🎬"}</span>
+              </button>
+              <button
+                onClick={() => setMainViewMode("map")}
+                className={`px-3 sm:px-4 py-1.5 rounded-xl font-black text-xs transition-all flex items-center gap-1.5 ${
+                  mainViewMode === "map"
+                    ? "bg-purple-600 text-white shadow-md shadow-purple-600/25"
+                    : "text-slate-600 hover:text-slate-900"
+                }`}
+              >
+                <Map className="w-3.5 h-3.5" />
+                <span>{language === "badini" ? "ڕێکا فێربوونێ 🗺️" : language === "ku" ? "ڕێگەی فێربوون 🗺️" : "Learning Map 🗺️"}</span>
+              </button>
+            </div>
 
-            <button
-              onClick={() => setActiveSeason(2)}
-              className={`px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-xl font-black text-xs transition-all duration-300 shadow-sm active:scale-95 flex items-center gap-1.5 sm:gap-2 shrink-0 ${
-                activeSeason === 2
-                  ? "bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-600 text-white border border-purple-400/50 shadow-purple-600/30"
-                  : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 hover:text-slate-900"
-              }`}
-            >
-              <span>{language === "badini" ? "وەرزێ ٢" : language === "ku" ? "وەرزێ ٢" : "Season 2"}</span>
-              <span className="text-[10px] sm:text-[11px] opacity-80 font-normal">
-                ({language === "badini" ? "١٥ وانە" : language === "ku" ? "١٥ وانە" : "15 Lessons"})
-              </span>
-            </button>
+            {/* Seasons Strip */}
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setActiveSeason(1)}
+                className={`px-3.5 sm:px-4 py-1.5 rounded-xl font-black text-xs transition-all duration-300 shadow-sm active:scale-95 flex items-center gap-1.5 shrink-0 ${
+                  activeSeason === 1
+                    ? "bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-600 text-white border border-purple-400/50 shadow-purple-600/30"
+                    : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 hover:text-slate-900"
+                }`}
+              >
+                <Sparkles className="w-3.5 h-3.5 text-purple-200" />
+                <span>{language === "badini" ? "وەرزێ ١" : language === "ku" ? "وەرزێ ١" : "Season 1"}</span>
+                <span className="text-[10px] opacity-80 font-normal">
+                  ({language === "badini" ? "٢٢ وانە" : language === "ku" ? "٢٢ وانە" : "22 Lessons"})
+                </span>
+              </button>
+
+              <button
+                onClick={() => setActiveSeason(2)}
+                className={`px-3.5 sm:px-4 py-1.5 rounded-xl font-black text-xs transition-all duration-300 shadow-sm active:scale-95 flex items-center gap-1.5 shrink-0 ${
+                  activeSeason === 2
+                    ? "bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-600 text-white border border-purple-400/50 shadow-purple-600/30"
+                    : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 hover:text-slate-900"
+                }`}
+              >
+                <span>{language === "badini" ? "وەرزێ ٢" : language === "ku" ? "وەرزێ ٢" : "Season 2"}</span>
+                <span className="text-[10px] opacity-80 font-normal">
+                  ({language === "badini" ? "١٥ وانە" : language === "ku" ? "١٥ وانە" : "15 Lessons"})
+                </span>
+              </button>
+            </div>
           </div>
         </div>
 
         {/* ==================================================================== */}
+        {/* LESSON EXPLANATIONS VIEW (شرۆڤەکرنا هویر یا وانەیان) */}
+        {/* ==================================================================== */}
+        {mainViewMode === "explanations" && (
+          <div className="relative flex-1 w-full bg-slate-50/70 p-3 sm:p-6 lg:p-8 min-h-[750px] flex flex-col gap-6">
+            <div className="w-full max-w-7xl 2xl:max-w-[1550px] mx-auto space-y-6">
+              {/* Hero Banner for Lesson Explanations */}
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="relative rounded-[28px] sm:rounded-[32px] bg-gradient-to-r from-purple-700 via-indigo-700 to-purple-800 text-white p-6 sm:p-8 shadow-xl shadow-purple-900/15 overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-6 border border-purple-400/30"
+              >
+                {/* Sparkle background effects */}
+                <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                  <div className="absolute top-4 left-1/4 w-2 h-2 bg-white/60 rounded-full blur-[0.5px] animate-pulse" />
+                  <div className="absolute top-1/2 left-1/3 text-white/30 text-sm">✦</div>
+                  <div className="absolute bottom-6 right-1/4 w-2.5 h-2.5 bg-purple-200/50 rounded-full blur-[1px]" />
+                  <div className="absolute -right-16 -top-16 w-64 h-64 bg-purple-400/20 rounded-full blur-3xl pointer-events-none" />
+                </div>
+
+                {/* Right text in RTL */}
+                <div className="relative z-10 flex flex-col items-start text-right flex-1">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 border border-white/20 text-purple-100 text-xs font-black mb-2.5">
+                    <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                    <span>
+                      {language === "badini"
+                        ? `پۆلا ۱۲ • وەرزێ ${activeSeason} • شرۆڤەکرنا هویر یا وانەیان`
+                        : language === "ku"
+                        ? `پۆلی ۱۲ • وەرزی ${activeSeason} • شرۆڤەی وردی وانەکان`
+                        : `Grade 12 • Season ${activeSeason} • Lesson Explanations`}
+                    </span>
+                  </div>
+
+                  <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+                    {language === "badini"
+                      ? `شرۆڤەکرنا هویر یا وانەیێن ${config.titleKu}`
+                      : language === "ku"
+                      ? `شرۆڤەکردنی وردی وانەکانی ${config.titleKu}`
+                      : `${config.titleEn} Lesson Explanations`}
+                  </h2>
+
+                  <p className="text-xs sm:text-sm text-purple-100/90 mt-2 max-w-xl leading-relaxed font-medium">
+                    {language === "badini"
+                      ? "هەمی وانە، بەش و یاسایێن گرنگ ب شێوازەکێ هویر و ئاسان هاتینە شرۆڤەکرن دگەل شیکارکرنا پرسیارێن وزاری یێن سالێن ٢٠١٥-٢٠٢٤."
+                      : language === "ku"
+                      ? "هەموو وانە، بەش و یاسا گرنگەکان بە شێوازێکی ورد و ئاسان شرۆڤەکراون لەگەڵ شیکارکردنی پرسیارە وزارییەکانی ٢٠١٥-٢٠٢٤."
+                      : "All chapters, lessons, and essential formulas broken down clearly with solved ministerial past paper questions."}
+                  </p>
+
+                  <div className="flex flex-wrap items-center gap-2 mt-4">
+                    <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-purple-900/40 border border-purple-300/30 text-xs font-bold">
+                      <Video className="w-3.5 h-3.5 text-purple-300" />
+                      <span>{config.nodes.length} {language === "badini" || language === "ku" ? "بەشێن سەرەکی" : "Main Chapters"}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-purple-900/40 border border-purple-300/30 text-xs font-bold">
+                      <BookOpen className="w-3.5 h-3.5 text-amber-300" />
+                      <span>
+                        {config.nodes.map(n => (n.subtopicsKu ? n.subtopicsKu.length : 3)).reduce((a, b) => a + b, 0)} {language === "badini" || language === "ku" ? "وانەیێن شرۆڤەکری" : "Lessons"}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-purple-900/40 border border-purple-300/30 text-xs font-bold">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-300" />
+                      <span>{language === "badini" || language === "ku" ? "شیکارییا پرسیارێن وزاری" : "Ministerial Solved"}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Left mascot illustration */}
+                <div className="relative z-10 flex-shrink-0 flex items-center justify-center">
+                  <motion.div
+                    animate={{ y: [0, -6, 0] }}
+                    transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+                    className="relative"
+                  >
+                    <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-3xl bg-white/10 p-2 backdrop-blur-md border border-white/20 shadow-2xl flex items-center justify-center">
+                      <img
+                        src={config.mascot}
+                        alt={config.titleKu}
+                        className="w-full h-full object-contain rounded-2xl drop-shadow-md"
+                      />
+                    </div>
+                  </motion.div>
+                </div>
+              </motion.div>
+
+              {/* Active Audio Lesson Bar (if audio explanation is playing) */}
+              {activeAudioLesson && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="rounded-2xl p-3.5 sm:p-4 bg-gradient-to-r from-purple-900 to-indigo-900 text-white border border-purple-400/40 flex items-center justify-between gap-3 shadow-lg"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-purple-500/30 border border-purple-400/40 flex items-center justify-center text-purple-200 animate-pulse">
+                      <Volume2 className="w-5 h-5 text-amber-300" />
+                    </div>
+                    <div className="text-right">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-black text-amber-300">
+                          {language === "badini" ? "دەنگێ شرۆڤەکرنا وانەیێ چالاکە" : "دەنگی شرۆڤەی وانە چالاکە"}
+                        </span>
+                        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                      </div>
+                      <p className="text-xs text-purple-200 mt-0.5">
+                        {language === "badini"
+                          ? "گوێگرتن لە مامۆستایێ بسپۆر و دووبارەکرنا یاسایێن گرنگ"
+                          : "گوێگرتن لە مامۆستای پسپۆڕ و دووبارەکردنەوەی یاسا گرنگەکان"}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <div className="hidden sm:flex items-center gap-1">
+                      <span className="w-1 h-3 bg-purple-300 rounded-full animate-pulse" />
+                      <span className="w-1 h-5 bg-amber-300 rounded-full animate-pulse delay-75" />
+                      <span className="w-1 h-2 bg-purple-300 rounded-full animate-pulse delay-150" />
+                      <span className="w-1 h-6 bg-emerald-300 rounded-full animate-pulse delay-100" />
+                      <span className="w-1 h-4 bg-purple-300 rounded-full animate-pulse delay-200" />
+                    </div>
+                    <button
+                      onClick={() => setActiveAudioLesson(null)}
+                      className="px-3 py-1.5 rounded-xl bg-white/20 hover:bg-white/30 text-xs font-black text-white transition active:scale-95"
+                    >
+                      {language === "badini" || language === "ku" ? "ڕاگرتن" : "Stop"}
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+
+              {/* Chapters & Lessons List */}
+              <div className="space-y-6">
+                {config.nodes.map((node, cIndex) => {
+                  const subtopics = node.subtopicsKu || [
+                    "تایبەتمەندیێن بنەڕەتی و یاسا",
+                    "ڕێگەی شیكاركردنی پرسیارەكان",
+                    "شیکارکردنی تاقیکردنەوە وزارییەکان"
+                  ];
+
+                  return (
+                    <motion.div
+                      key={node.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: cIndex * 0.05, duration: 0.35 }}
+                      className="rounded-[24px] sm:rounded-[28px] bg-white border border-purple-100/80 shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden"
+                    >
+                      {/* Chapter Card Header */}
+                      <div className="p-4 sm:p-5 bg-gradient-to-r from-purple-50/70 via-indigo-50/40 to-white border-b border-purple-100 flex flex-wrap items-center justify-between gap-3">
+                        <div className="flex items-center gap-3 text-right">
+                          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-purple-600 text-white flex items-center justify-center font-black text-sm sm:text-base shadow-sm shrink-0">
+                            {node.number}
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <h3 className="text-base sm:text-lg font-black text-slate-900 tracking-tight">
+                                {language === "badini" ? node.titleBadini || node.titleKu : node.titleKu}
+                              </h3>
+                              <span className="text-xs font-bold text-purple-600 font-mono hidden sm:inline">
+                                ({node.titleEn})
+                              </span>
+                            </div>
+                            <span className="text-[11px] sm:text-xs font-bold text-slate-500">
+                              {subtopics.length} {language === "badini" || language === "ku" ? "وانەیێن شرۆڤەکری" : "Lessons"} • {node.status === "completed" ? (language === "badini" || language === "ku" ? "تەواوبوو ✅" : "Completed") : (language === "badini" || language === "ku" ? "بەردەوامە" : "In Progress")}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Chapter Quick Quiz Callout */}
+                        <button
+                          onClick={() => onStartQuiz(subject.id)}
+                          className="px-3.5 py-1.5 sm:py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-black text-xs transition active:scale-95 flex items-center gap-1.5 shadow-sm shadow-purple-600/20"
+                        >
+                          <CheckCircle2 className="w-3.5 h-3.5" />
+                          <span>{language === "badini" ? "تاقیکرنا ڤی بەشی" : language === "ku" ? "تاقیکردنەوەی ئەم بەشە" : "Chapter Quiz"}</span>
+                        </button>
+                      </div>
+
+                      {/* Subtopics / Lessons under this Chapter */}
+                      <div className="divide-y divide-slate-100 p-2 sm:p-3">
+                        {subtopics.map((subtopic, lIndex) => {
+                          const durationStr = `${16 + lIndex * 4}:00 خۆلەک`;
+                          const isAudioActive = activeAudioLesson === `${node.id}-${lIndex}`;
+
+                          return (
+                            <div
+                              key={lIndex}
+                              className="p-3 sm:p-4 rounded-2xl hover:bg-purple-50/40 transition-colors flex flex-col md:flex-row md:items-center justify-between gap-3.5 text-right"
+                            >
+                              {/* Left in RTL: Lesson details */}
+                              <div className="flex items-start gap-3">
+                                <div className="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 font-black text-xs flex items-center justify-center shrink-0 mt-0.5">
+                                  {lIndex + 1}
+                                </div>
+                                <div className="space-y-1">
+                                  <div className="flex flex-wrap items-center gap-2">
+                                    <h4 className="text-sm sm:text-base font-black text-slate-900">
+                                      {subtopic}
+                                    </h4>
+                                    <span className="px-2 py-0.5 rounded-md bg-purple-100 text-purple-700 text-[10px] font-bold">
+                                      {durationStr}
+                                    </span>
+                                  </div>
+                                  <p className="text-xs text-slate-500 font-medium leading-relaxed">
+                                    {language === "badini"
+                                      ? "شرۆڤەکرنا یاسا و چەمکێن وانەیێ دگەل ڕاهێنان و پرسیارێن تاقیکرنا وزاری."
+                                      : language === "ku"
+                                      ? "شرۆڤەکردنی یاسا و چەمکەکانی وانە لەگەڵ ڕاهێنان و پرسیاری وزاری."
+                                      : "Detailed walkthrough of laws and concepts with solved past exam items."}
+                                  </p>
+                                </div>
+                              </div>
+
+                              {/* Right in RTL: Action Buttons (Watch Video, Listen Audio, Summary Notes, Quiz) */}
+                              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 self-end md:self-center shrink-0">
+                                {/* Watch Video Button */}
+                                <button
+                                  onClick={() =>
+                                    setSelectedVideoLesson({
+                                      title: subtopic,
+                                      chapterTitle: node.titleKu || node.titleBadini,
+                                      teacher: language === "badini" || language === "ku" ? "مامۆستایێ بسپۆرێ پۆلا ۱۲" : "Grade 12 Master Teacher",
+                                      duration: durationStr,
+                                      videoUrl: "/public/bhez.webm"
+                                    })
+                                  }
+                                  className="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-black text-xs flex items-center gap-1.5 transition active:scale-95 shadow-sm shadow-purple-600/20"
+                                >
+                                  <Video className="w-3.5 h-3.5" />
+                                  <span>{language === "badini" || language === "ku" ? "تەماشاکرنا ڤیدیۆیێ" : "Watch Video"}</span>
+                                </button>
+
+                                {/* Audio Explanation Button */}
+                                <button
+                                  onClick={() =>
+                                    setActiveAudioLesson(isAudioActive ? null : `${node.id}-${lIndex}`)
+                                  }
+                                  className={`px-3 py-1.5 rounded-xl font-black text-xs flex items-center gap-1.5 transition active:scale-95 border ${
+                                    isAudioActive
+                                      ? "bg-amber-500 text-slate-950 border-amber-400 shadow-sm"
+                                      : "bg-white text-slate-700 hover:bg-slate-100 border-slate-200"
+                                  }`}
+                                >
+                                  <Volume2 className="w-3.5 h-3.5" />
+                                  <span>
+                                    {isAudioActive
+                                      ? (language === "badini" || language === "ku" ? "دەنگ لێدەدات..." : "Playing...")
+                                      : (language === "badini" || language === "ku" ? "شرۆڤەیا دەنگی" : "Audio")}
+                                  </span>
+                                </button>
+
+                                {/* Summary & Formula Sheet Button */}
+                                <button
+                                  onClick={() =>
+                                    setSelectedSummaryLesson({
+                                      title: subtopic,
+                                      chapterTitle: node.titleKu || node.titleBadini,
+                                      summaryPoints: [
+                                        `پوختە و ناساندنی گرنگترین چەمکەکانی وانەی (${subtopic})`,
+                                        "یاسا بیرکارییەکان و هاوکێشەکان کە پێویستە لەبەر بکرێن",
+                                        "تێبینی و فێڵە باوەکانی تاقیکردنەوەی وزاری بۆ ئەم وانەیە",
+                                        "خاڵەکانی وەرگرتنی نمرەی تەواو لە پرسیارەکانی ئەم بەشەدا"
+                                      ]
+                                    })
+                                  }
+                                  className="px-2.5 py-1.5 rounded-xl bg-white hover:bg-purple-50 text-purple-700 border border-purple-200 font-black text-xs flex items-center gap-1.5 transition active:scale-95"
+                                  title="پوختەی وانە و یاساکان"
+                                >
+                                  <FileText className="w-3.5 h-3.5" />
+                                  <span>{language === "badini" || language === "ku" ? "پوختە" : "Notes"}</span>
+                                </button>
+
+                                {/* Ministerial Quiz for this lesson */}
+                                <button
+                                  onClick={() => onStartQuiz(subject.id)}
+                                  className="p-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 transition active:scale-95"
+                                  title="شیکارکرنا پرسیارێن وزاری"
+                                >
+                                  <CheckCircle2 className="w-4 h-4" />
+                                </button>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+
+              {/* Bottom Quick Exam Card */}
+              <div className="rounded-[28px] p-6 bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-slate-950 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl shadow-amber-500/15">
+                <div className="text-right">
+                  <h3 className="text-xl font-black">
+                    {language === "badini"
+                      ? "ئامادەی بۆ تاقیکرنا گشتی یا وزاری؟ 🎯"
+                      : "ئامادەیت بۆ تاقیکردنەوەی گشتی وزاری؟ 🎯"}
+                  </h3>
+                  <p className="text-xs sm:text-sm font-bold text-slate-900/80 mt-1">
+                    {language === "badini"
+                      ? "هەمی پرسیارێن سالێن پێشتر تاقیبکە دا نمرەیا خۆ بزانی."
+                      : "هەموو پرسیارەکانی ساڵانی پێشوو تاقیبکەرەوە تا نمرەی خۆت بزانیت."}
+                  </p>
+                </div>
+                <button
+                  onClick={() => onStartQuiz(subject.id)}
+                  className="px-6 py-3 rounded-2xl bg-slate-950 hover:bg-slate-900 text-white font-black text-sm shadow-lg transition active:scale-95 shrink-0"
+                >
+                  {language === "badini" || language === "ku" ? "دەستپێکرنا تاقیکرنێ ⚡" : "Start Full Exam"}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ==================================================================== */}
         {/* GAMIFIED MAP LEARNING PATHWAY & WIDGETS */}
         {/* ==================================================================== */}
+        {mainViewMode === "map" && (
         <div className="relative flex-1 w-full bg-white p-4 sm:p-8 overflow-x-hidden min-h-[750px] flex flex-col justify-between">
 
           {/* Main Container: Centered Learning Pathway */}
-          <div className="relative z-10 w-full max-w-4xl mx-auto flex flex-col items-center">
+          <div className="relative z-10 w-full max-w-5xl 2xl:max-w-6xl mx-auto flex flex-col items-center">
             
             {/* LEARNING PATHWAY */}
             <div className="w-full relative flex flex-col items-center">
@@ -2592,10 +2994,176 @@ export const SubjectDetailView: React.FC<SubjectDetailViewProps> = ({
 
 
         </div>
+        )}
 
       </div>
 
-      {/* GIFT CELEBRATION MODAL OVERLAY */}
+      {/* VIDEO LESSON PLAYER MODAL */}
+      <AnimatePresence>
+        {selectedVideoLesson && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-3 sm:p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="relative w-full max-w-4xl lg:max-w-5xl max-h-[95vh] bg-white dark:bg-slate-900 rounded-[28px] sm:rounded-[32px] border border-purple-200 dark:border-purple-800 shadow-2xl overflow-y-auto flex flex-col text-right my-auto"
+              dir="rtl"
+            >
+              {/* Modal Header */}
+              <div className="p-4 sm:p-5 bg-gradient-to-r from-purple-700 via-indigo-700 to-purple-800 text-white flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-9 h-9 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white">
+                    <Video className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <span className="text-[11px] font-bold text-purple-200">
+                      {selectedVideoLesson.chapterTitle}
+                    </span>
+                    <h3 className="text-base sm:text-lg font-black text-white leading-tight">
+                      {selectedVideoLesson.title}
+                    </h3>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => setSelectedVideoLesson(null)}
+                  className="p-2 rounded-xl bg-white/15 hover:bg-white/25 text-white transition active:scale-95"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Video Player Box */}
+              <div className="relative w-full aspect-video bg-black flex items-center justify-center overflow-hidden">
+                <video
+                  src={selectedVideoLesson.videoUrl || "/public/bhez.webm"}
+                  controls
+                  autoPlay
+                  className="w-full h-full object-contain"
+                  poster={config.mascot}
+                />
+              </div>
+
+              {/* Lesson Details & Actions */}
+              <div className="p-4 sm:p-6 space-y-4">
+                <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-bold text-slate-500 dark:text-slate-400">
+                  <div className="flex items-center gap-2">
+                    <User className="w-4 h-4 text-purple-600" />
+                    <span>{selectedVideoLesson.teacher}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Clock className="w-4 h-4 text-amber-500" />
+                    <span>{selectedVideoLesson.duration}</span>
+                  </div>
+                </div>
+
+                <div className="p-3.5 rounded-2xl bg-purple-50 dark:bg-purple-900/20 border border-purple-100 dark:border-purple-800/40 text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                  <span className="font-black text-purple-800 dark:text-purple-300 block mb-1">
+                    💡 تێبینیێن سەرەکی یێن ڤێ وانەیێ:
+                  </span>
+                  ئەم وانەیە تایبەتە بە پێناسە، یاسا بنەڕەتییەکان و شیکارکردنی ئەو پرسیارە وزارییانەی لە ئەزموونە گشتییەکاندا هاتوونەتەوە. پاش تەواوبوونی وانەکە، بەشداربە لە تاقیکردنەوە بۆ دڵنیابوون لە ئاستت.
+                </div>
+
+                <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+                  <button
+                    onClick={() => setSelectedVideoLesson(null)}
+                    className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-black text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+                  >
+                    داخستن
+                  </button>
+                  <button
+                    onClick={() => {
+                      setSelectedVideoLesson(null);
+                      onStartQuiz(subject.id);
+                    }}
+                    className="px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-black shadow-md shadow-purple-600/30 transition active:scale-95 flex items-center gap-1.5"
+                  >
+                    <CheckCircle2 className="w-4 h-4" />
+                    <span>تاقیکرن لسەر ڤێ وانەیێ 🎯</span>
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* SUMMARY & FORMULA NOTES MODAL */}
+      <AnimatePresence>
+        {selectedSummaryLesson && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-3 sm:p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="relative w-full max-w-2xl lg:max-w-3xl max-h-[92vh] bg-white dark:bg-slate-900 rounded-[28px] sm:rounded-[32px] border border-purple-200 dark:border-purple-800 shadow-2xl overflow-y-auto flex flex-col text-right my-auto"
+              dir="rtl"
+            >
+              {/* Header */}
+              <div className="p-4 sm:p-5 bg-gradient-to-r from-purple-700 via-indigo-700 to-purple-800 text-white flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-9 h-9 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white">
+                    <FileText className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <span className="text-[11px] font-bold text-purple-200">
+                      {selectedSummaryLesson.chapterTitle}
+                    </span>
+                    <h3 className="text-base sm:text-lg font-black text-white leading-tight">
+                      {selectedSummaryLesson.title}
+                    </h3>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => setSelectedSummaryLesson(null)}
+                  className="p-2 rounded-xl bg-white/15 hover:bg-white/25 text-white transition active:scale-95"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Summary Points List */}
+              <div className="p-5 sm:p-6 space-y-3">
+                <span className="text-xs font-black text-purple-600 dark:text-purple-400 block">
+                  📝 پوختە و یاسایێن گرنگ یێن وزاری:
+                </span>
+
+                <div className="space-y-2.5">
+                  {selectedSummaryLesson.summaryPoints.map((pt, pIdx) => (
+                    <div
+                      key={pIdx}
+                      className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-purple-100 dark:border-purple-800/40 text-xs font-bold text-slate-700 dark:text-slate-200 flex items-start gap-2.5"
+                    >
+                      <span className="w-5 h-5 rounded-full bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 flex items-center justify-center shrink-0 mt-0.5 text-[11px]">
+                        {pIdx + 1}
+                      </span>
+                      <p className="flex-1 leading-relaxed">{pt}</p>
+                    </div>
+                  ))}
+                </div>
+
+                <button
+                  onClick={() => setSelectedSummaryLesson(null)}
+                  className="w-full mt-4 py-3 rounded-2xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-black shadow-md shadow-purple-600/30 transition active:scale-95"
+                >
+                  دەستخۆش، تێگەهشتم ✨
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       <AnimatePresence>
         {showGiftModal && (
           <motion.div

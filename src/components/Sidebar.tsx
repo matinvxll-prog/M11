@@ -93,7 +93,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: "pomodoro" as NavTab, labelKu: "کاتژمێری پۆمۆدۆرۆ (تەرکیز)", labelBadini: "کاتژمێرا پۆمۆدۆرۆ (تەرکیز)", labelEn: "Pomodoro Focus Timer", icon: Timer },
     { id: "revision" as NavTab, labelKu: "پێداچوون 🔄", labelBadini: "پێداچوون 🔄", labelEn: "Revision 🔄", icon: RefreshCw },
     { id: "studyTools" as NavTab, labelKu: "ئامرازێن خویندنێ 🧠", labelBadini: "ئامرازێن خویندنێ 🧠", labelEn: "Study Tools 🧠", icon: Calendar },
-    { id: "subjects" as NavTab, labelKu: "بابەتەکان", labelBadini: "بابەتێن پۆلا ۱۲", labelEn: "Subjects", icon: BookOpen },
+    { id: "subjects" as NavTab, labelKu: "شرۆڤەی وانەکان 📖", labelBadini: "شرۆڤەکرنا وانەیان 📖", labelEn: "Lesson Explanations 📖", icon: BookOpen },
     { id: "exams" as NavTab, labelKu: "تاقیکردنەوەکان", labelBadini: "تاقیکرنێن وزاری", labelEn: "Exams", icon: FileCheck },
     { id: "videos" as NavTab, labelKu: "ڤیدیۆی وانەکان", labelBadini: "ڤیدیۆیێن وانان", labelEn: "Video Lessons", icon: Video },
     { id: "pdfLibrary" as NavTab, labelKu: "PDF و مەلزەمە", labelBadini: "PDF و مەلزەمە", labelEn: "PDF Library", icon: FileDown },

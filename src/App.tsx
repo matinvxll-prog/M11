@@ -4,7 +4,7 @@ import SplashScreen from './SplashScreen';
 import { motion, AnimatePresence } from 'motion/react';
 
 export default function App() {
-  const [showSplash, setShowSplash] = useState(true);
+  const [showSplash, setShowSplash] = useState(false);
 
   return (
     <div className="relative min-h-screen bg-slate-950 text-white">

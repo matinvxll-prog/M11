@@ -80,7 +80,7 @@ interface DashboardProps {
 
 export default function Dashboard({ onReplaySplash }: DashboardProps) {
   const [language, setLanguage] = useState<Language>("badini");
-  const [activeTab, setActiveTab] = useState<NavTab>("home");
+  const [activeTab, setActiveTab] = useState<NavTab>("subjects");
   const [selectedSubjectId, setSelectedSubjectId] = useState<SubjectId | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -245,13 +245,15 @@ export default function Dashboard({ onReplaySplash }: DashboardProps) {
 
   if (selectedSubjectObject) {
     return (
-      <div dir="rtl" className="min-h-screen bg-[#0B0820] text-slate-100 font-sans">
+      <div dir="rtl" className="fixed inset-0 z-[9999] bg-slate-50 text-slate-800 w-screen h-screen h-[100dvh] overflow-y-auto overflow-x-hidden font-sans select-none">
         <SubjectDetailView
           subject={selectedSubjectObject}
           language={language}
           userName={userProfile.name}
+          user={userProfile}
           onBack={() => setSelectedSubjectId(null)}
           onStartQuiz={(chapter) => handleStartQuizForSubject(selectedSubjectObject.id, chapter)}
+          onOpenAiTutor={() => setShowAiTutor(true)}
         />
       </div>
     );
@@ -263,7 +265,7 @@ export default function Dashboard({ onReplaySplash }: DashboardProps) {
       className={`min-h-screen ${isDarkMode || activeTab === "exams" ? "bg-[#090a16] text-slate-100" : "bg-[#f4f3f8] text-slate-900"} font-sans flex flex-col selection:bg-purple-500 selection:text-white`}
     >
       {/* Top Header Navbar */}
-      {activeTab !== "studyPlan" && activeTab !== "pomodoro" && activeTab !== "exams" && (
+      {activeTab !== "studyPlan" && activeTab !== "pomodoro" && activeTab !== "exams" && activeTab !== "subjects" && (
         <Navbar
           user={userProfile}
           language={language}
@@ -288,7 +290,7 @@ export default function Dashboard({ onReplaySplash }: DashboardProps) {
       {/* Body Layout */}
       <div className="flex flex-col flex-1">
         {/* Top Navigation Bar with Quick Actions and Section Tabs */}
-        {activeTab !== "studyPlan" && activeTab !== "pomodoro" && activeTab !== "exams" && (
+        {activeTab !== "studyPlan" && activeTab !== "pomodoro" && activeTab !== "exams" && activeTab !== "subjects" && (
           <TopNav
             activeTab={activeTab}
             onSelectTab={handleSelectTab}
@@ -310,7 +312,7 @@ export default function Dashboard({ onReplaySplash }: DashboardProps) {
         )}
 
         {/* Main Content View with Framer Motion Page Transitions */}
-        <main className={`flex-1 w-full ${activeTab === "pomodoro" ? "p-0 max-w-none" : activeTab === "exams" ? "p-3 sm:p-6 lg:p-8 w-full max-w-7xl mx-auto" : "p-3 sm:p-6 lg:p-8 w-full max-w-7xl mx-auto"}`}>
+        <main className={`flex-1 w-full ${activeTab === "pomodoro" || activeTab === "subjects" ? "p-0 max-w-none" : activeTab === "exams" ? "p-3 sm:p-6 lg:p-8 w-full max-w-7xl mx-auto" : "p-3 sm:p-6 lg:p-8 w-full max-w-7xl mx-auto"}`}>
           {searchTerm.trim().length > 0 ? (
             <GlobalSearchResults
               searchTerm={searchTerm}
@@ -452,23 +454,20 @@ export default function Dashboard({ onReplaySplash }: DashboardProps) {
                     onOpenAiTutor={() => setShowAiTutor(true)}
                   />
                 ) : (
-                  <div className="space-y-6">
-                    <div className="p-6 bg-gradient-to-r from-purple-900/40 via-indigo-900/40 to-slate-900 rounded-3xl border border-purple-500/20 backdrop-blur-md">
-                      <h1 className="text-2xl font-extrabold text-white mb-2">
-                        {language === "badini" ? "بابەتێن خویندنێ پۆلا ۱۲" : "بابەتەکانی خوێندنی پۆلی ۱۲"}
-                      </h1>
-                      <p className="text-sm text-purple-200/80">
-                        {language === "badini"
-                          ? "بابەتەکێ هەلبژێرە دا دەست ب راهێنان و پرسیاران بکەی."
-                          : "بابەتێک هەڵبژێرە تا دەست بە ڕاهێنان و پرسیارەکان بکەیت."}
-                      </p>
+                  <div className="w-full min-h-screen bg-[#f4effa] dark:bg-[#0c0926] p-3 sm:p-6 lg:p-8">
+                    <div className="w-full max-w-7xl 2xl:max-w-[1550px] mx-auto">
+                      <SubjectsGrid
+                        subjects={subjectsList}
+                        language={language}
+                        isDarkMode={isDarkMode}
+                        onSelectSubject={(id) => setSelectedSubjectId(id)}
+                        onStartQuiz={(id) => handleStartQuizForSubject(id)}
+                        onOpenStudyPlan={() => setActiveTab("studyPlan")}
+                        onViewAll={() => {}}
+                        onBackToHome={() => handleSelectTab("home")}
+                        onOpenAiTutor={() => setShowAiTutor(true)}
+                      />
                     </div>
-                    <SubjectsGrid
-                      subjects={subjectsList}
-                      language={language}
-                      onSelectSubject={(id) => setSelectedSubjectId(id)}
-                      onViewAll={() => {}}
-                    />
                   </div>
                 )
               )}

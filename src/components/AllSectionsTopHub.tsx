@@ -114,8 +114,8 @@ export const AllSectionsTopHub: React.FC<AllSectionsTopHubProps> = ({
         },
         {
           id: "subjects" as NavTab,
-          label: isBadini ? "بابەتێن پۆلا ١٢" : isKu ? "بابەتەکان" : "Subjects",
-          labelEn: "All Grade 12 Subjects",
+          label: isBadini ? "شرۆڤەکرنا وانەیان" : isKu ? "شرۆڤەی وانەکان" : "Lesson Explanations",
+          labelEn: "Grade 12 Lesson Explanations",
           icon: BookOpen,
           iconBg: "bg-gradient-to-br from-indigo-500 to-purple-600 text-white",
           sideIcon: BookOpen
