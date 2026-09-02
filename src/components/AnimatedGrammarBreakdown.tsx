@@ -413,7 +413,7 @@ const GrammarFormulaGame: React.FC<GrammarFormulaGameProps> = ({
                   onClick={handleResetGame}
                   className="px-3.5 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-500 text-slate-950 font-black text-xs transition cursor-pointer active:scale-95 shadow-xs"
                 >
-                  {language === "badini" ? "دووبارە یاری بکە 🔄" : "دووبارە یاری بکە 🔄"}
+                  {language === "badini" ? "دووبارە یاری بکە" : "دووبارە یاری بکە"}
                 </button>
               </div>
             </motion.div>
@@ -545,7 +545,7 @@ export const AnimatedGrammarBreakdown: React.FC<AnimatedGrammarBreakdownProps> =
   const currentMemoryHook =
     language === "badini"
       ? breakdown.memoryHookBadini || "💡 یاسایا زێڕین: [نیشانا دە] + [قەدی بوری] = بێ گومان دبیتە بوریێ بەردەوامی ڕاگەهاندن!"
-      : breakdown.memoryHookKu || "💡 قاعیدەی مێشک: [دە] + [قەدی ڕابردوو] = هەمیشە بوریی بەردەوامی ڕاگەهاندنە!";
+      : breakdown.memoryHookKu || "💡 یاسا: [دە] + [قەدی ڕابردوو] = هەمیشە بوریی بەردەوامی ڕاگەهاندنە!";
 
   // Teacher speech text reacting to the active step
   const getTeacherSpeechText = (): string => {
@@ -621,33 +621,70 @@ export const AnimatedGrammarBreakdown: React.FC<AnimatedGrammarBreakdownProps> =
           </div>
         </div>
 
-        {/* View Mode Stepper vs Overview Toggle */}
-        <div className="flex items-center gap-1 bg-purple-100/80 p-1 rounded-2xl border border-purple-200 shadow-xs shrink-0">
-          <button
-            type="button"
-            onClick={() => setViewMode("stepper")}
-            className={`px-3 py-1.5 rounded-xl text-xs font-black flex items-center gap-1.5 transition cursor-pointer active:scale-95 ${
-              viewMode === "stepper"
-                ? "bg-gradient-to-r from-purple-700 to-indigo-700 text-white shadow-sm shadow-purple-700/30"
-                : "text-purple-700 hover:text-purple-950"
-            }`}
-          >
-            <ListOrdered className="w-3.5 h-3.5" />
-            <span>{language === "badini" ? "پێنگاڤ ب پێنگاڤ" : "هەنگاو بە هەنگاو"}</span>
-          </button>
+        {/* Top Control Bar: Playback Controls & View Mode Stepper vs Overview */}
+        <div className="flex items-center gap-2 flex-wrap">
+          {/* Play/Pause & Restart Controls moved to TOP */}
+          <div className="flex items-center gap-1 bg-purple-100/90 p-1 rounded-2xl border border-purple-200 shadow-xs shrink-0">
+            <button
+              type="button"
+              onClick={() => setIsPlaying(!isPlaying)}
+              className={`px-3 py-1.5 rounded-xl text-xs font-black flex items-center gap-1.5 transition cursor-pointer active:scale-95 ${
+                isPlaying
+                  ? "bg-amber-400 text-slate-950 shadow-sm font-black"
+                  : "bg-purple-700 hover:bg-purple-800 text-white shadow-sm"
+              }`}
+              title={
+                isPlaying
+                  ? language === "badini" ? "راگرتن" : "وەستاندن"
+                  : language === "badini" ? "پێکرنا ئۆتۆماتیکی" : "پێکردنی ئۆتۆماتیکی"
+              }
+            >
+              {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+              <span>
+                {isPlaying
+                  ? language === "badini" ? "راگرتن" : "وەستاندن"
+                  : language === "badini" ? "لێدان" : "لێدان"}
+              </span>
+            </button>
 
-          <button
-            type="button"
-            onClick={() => setViewMode("overview")}
-            className={`px-3 py-1.5 rounded-xl text-xs font-black flex items-center gap-1.5 transition cursor-pointer active:scale-95 ${
-              viewMode === "overview"
-                ? "bg-gradient-to-r from-purple-700 to-indigo-700 text-white shadow-sm shadow-purple-700/30"
-                : "text-purple-700 hover:text-purple-950"
-            }`}
-          >
-            <LayoutGrid className="w-3.5 h-3.5" />
-            <span>{language === "badini" ? "نەخشەیا گشتی" : "نەخشەی گشتی"}</span>
-          </button>
+            <button
+              type="button"
+              onClick={handleRestart}
+              className="p-1.5 rounded-xl bg-white hover:bg-purple-50 text-purple-900 border border-purple-200 transition cursor-pointer active:scale-95 shadow-2xs"
+              title={language === "badini" ? "دووبارە ژ دەستپێکێ" : "دووبارە لە سەرەتاوە"}
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          {/* View Mode Stepper vs Overview Toggle */}
+          <div className="flex items-center gap-1 bg-purple-100/80 p-1 rounded-2xl border border-purple-200 shadow-xs shrink-0">
+            <button
+              type="button"
+              onClick={() => setViewMode("stepper")}
+              className={`px-3 py-1.5 rounded-xl text-xs font-black flex items-center gap-1.5 transition cursor-pointer active:scale-95 ${
+                viewMode === "stepper"
+                  ? "bg-gradient-to-r from-purple-700 to-indigo-700 text-white shadow-sm shadow-purple-700/30"
+                  : "text-purple-700 hover:text-purple-950"
+              }`}
+            >
+              <ListOrdered className="w-3.5 h-3.5" />
+              <span>{language === "badini" ? "پێنگاڤ ب پێنگاڤ" : "هەنگاو بە هەنگاو"}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setViewMode("overview")}
+              className={`px-3 py-1.5 rounded-xl text-xs font-black flex items-center gap-1.5 transition cursor-pointer active:scale-95 ${
+                viewMode === "overview"
+                  ? "bg-gradient-to-r from-purple-700 to-indigo-700 text-white shadow-sm shadow-purple-700/30"
+                  : "text-purple-700 hover:text-purple-950"
+              }`}
+            >
+              <LayoutGrid className="w-3.5 h-3.5" />
+              <span>{language === "badini" ? "نەخشەیا گشتی" : "نەخشەی گشتی"}</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -747,40 +784,44 @@ export const AnimatedGrammarBreakdown: React.FC<AnimatedGrammarBreakdownProps> =
                     transition={{ type: "spring", stiffness: 350, damping: 25 }}
                     className="space-y-3"
                   >
-                    {/* Active Working Segment Banner */}
-                    <div className="flex flex-wrap items-center justify-between gap-2 bg-white/10 backdrop-blur-md p-3 sm:p-3.5 rounded-2xl border-2 border-amber-400/40 shadow-inner">
-                      <div className="flex items-center gap-3 min-w-0">
-                        <div className="px-4 py-2 rounded-2xl bg-gradient-to-r from-amber-300 via-amber-400 to-yellow-400 text-slate-950 font-black text-xl sm:text-2xl border-2 border-white shadow-lg shadow-amber-500/30 shrink-0">
-                          «{activeSegment.segment}»
+                    {/* Active Working Segment Banner (Clean, Modern & Elegant) */}
+                    <div className="bg-white/[0.07] backdrop-blur-md p-3.5 sm:p-4 rounded-2xl border border-purple-300/20 shadow-md space-y-3">
+                      {/* Top Header: Word Segment + Role & Step Indicator */}
+                      <div className="flex flex-wrap items-center justify-between gap-2.5">
+                        <div className="flex items-center gap-3 min-w-0">
+                          {/* Vibrant Word Segment Chip */}
+                          <div className="px-4 py-1.5 rounded-xl bg-gradient-to-r from-amber-400 to-amber-300 text-slate-950 font-black text-lg sm:text-xl shadow-md border border-amber-200/80 shrink-0">
+                            {activeSegment.segment}
+                          </div>
+
+                          {/* Role Tag & Name */}
+                          <div className="space-y-0.5 min-w-0">
+                            <span className="text-[11px] text-amber-300/90 font-bold block">
+                              {language === "badini" ? "دەستنیشانکرنا بەشی:" : "دەستنیشانکردنی بەش:"}
+                            </span>
+                            <span className="text-sm sm:text-base font-black text-white block break-words">
+                              {language === "badini"
+                                ? activeSegment.roleBadini
+                                : activeSegment.roleKu}
+                            </span>
+                          </div>
                         </div>
 
-                        <div className="space-y-0.5 min-w-0">
-                          <span className="text-[11px] text-amber-300 font-extrabold block">
-                            {language === "badini"
-                              ? `ئەڤە « ${activeSegment.segment} » یە ⬅️ دەستنیشانکرن:`
-                              : `ئەمە « ${activeSegment.segment} » یە ⬅️ دەستنیشانکردن:`}
-                          </span>
-                          <span className="text-sm sm:text-base font-black text-white block break-words">
-                            {language === "badini"
-                              ? activeSegment.roleBadini
-                              : activeSegment.roleKu}
-                          </span>
+                        {/* Step Pill */}
+                        <div className="px-3 py-1 rounded-full bg-purple-500/20 border border-purple-300/30 text-purple-200 text-xs font-bold shrink-0">
+                          {language === "badini"
+                            ? `پێنگاڤا ${currentStepIndex + 1} ژ ${totalSteps}`
+                            : `هەنگاوی ${currentStepIndex + 1} لە ${totalSteps}`}
                         </div>
                       </div>
 
-                      <div className="px-3 py-1 rounded-xl bg-amber-400/20 border border-amber-300/40 text-amber-200 text-xs font-black shrink-0">
+                      {/* Clean & Elegant Explanation Box */}
+                      <div className="bg-purple-950/50 rounded-xl p-3 sm:p-3.5 border border-purple-400/20 text-xs sm:text-sm text-purple-100 font-medium leading-relaxed">
                         {language === "badini"
-                          ? `پێنگاڤا ${currentStepIndex + 1} ژ ${totalSteps}`
-                          : `هەنگاوی ${currentStepIndex + 1} لە ${totalSteps}`}
+                          ? activeSegment.descriptionBadini
+                          : activeSegment.descriptionKu}
                       </div>
                     </div>
-
-                    {/* Detailed Description */}
-                    <p className="text-xs sm:text-sm text-purple-100 font-bold leading-relaxed bg-black/40 p-3 sm:p-3.5 rounded-2xl border border-purple-500/30">
-                      {language === "badini"
-                        ? activeSegment.descriptionBadini
-                        : activeSegment.descriptionKu}
-                    </p>
                   </motion.div>
                 ) : (
                   /* 🏆 FINAL STEP: CONCLUSION & COMPLETE FORMULA */
@@ -868,16 +909,16 @@ export const AnimatedGrammarBreakdown: React.FC<AnimatedGrammarBreakdownProps> =
             </div>
           )}
 
-          {/* Stepper Navigation Controls Bar */}
-          <div className="flex items-center justify-between gap-2.5 pt-1">
+          {/* Stepper Navigation Controls Bar (Previous & Next) */}
+          <div className="flex items-center justify-between gap-3 pt-1">
             {/* Previous Step Button */}
             <button
               type="button"
               onClick={handlePrev}
               disabled={currentStepIndex === 0}
-              className={`px-4 py-2.5 rounded-2xl border-b-4 text-xs sm:text-sm font-black flex items-center gap-1.5 transition cursor-pointer active:translate-y-1 ${
+              className={`flex-1 max-w-[200px] py-2.5 px-4 rounded-2xl border-b-4 text-xs sm:text-sm font-black flex items-center justify-center gap-1.5 transition cursor-pointer active:translate-y-1 ${
                 currentStepIndex === 0
-                  ? "bg-slate-100 border-slate-200 text-slate-400 cursor-not-allowed border-b-2"
+                  ? "bg-slate-100 border-slate-200 text-slate-400 cursor-not-allowed border-b-2 opacity-60"
                   : "bg-purple-100 hover:bg-purple-200 border-purple-300 text-purple-950 shadow-xs"
               }`}
             >
@@ -885,39 +926,14 @@ export const AnimatedGrammarBreakdown: React.FC<AnimatedGrammarBreakdownProps> =
               <span>{language === "badini" ? "پێنگاڤا پێشتر" : "هەنگاوی پێشوو"}</span>
             </button>
 
-            {/* Play/Pause & Restart Center Controls */}
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => setIsPlaying(!isPlaying)}
-                className={`p-2.5 rounded-2xl border-b-4 transition cursor-pointer active:translate-y-1 ${
-                  isPlaying
-                    ? "bg-amber-400 text-slate-950 border-amber-600 shadow-md shadow-amber-500/30 font-black"
-                    : "bg-purple-600 hover:bg-purple-700 border-purple-800 text-white shadow-md shadow-purple-600/30"
-                }`}
-                title={isPlaying ? "راوەستاندن" : "پێکردنی ئۆتۆماتیکی"}
-              >
-                {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-              </button>
-
-              <button
-                type="button"
-                onClick={handleRestart}
-                className="p-2.5 rounded-2xl bg-purple-100 hover:bg-purple-200 border-b-4 border-purple-300 text-purple-900 transition cursor-pointer active:translate-y-1 shadow-xs"
-                title={language === "badini" ? "دووبارە ژ دەستپێکێ" : "دووبارە لە سەرەتاوە"}
-              >
-                <RotateCcw className="w-4 h-4" />
-              </button>
-            </div>
-
             {/* Next Step Button */}
             <button
               type="button"
               onClick={handleNext}
               disabled={currentStepIndex === totalSteps - 1}
-              className={`px-4 sm:px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-black flex items-center gap-1.5 transition cursor-pointer active:translate-y-1 ${
+              className={`flex-1 max-w-[220px] py-2.5 px-4 sm:px-5 rounded-2xl text-xs sm:text-sm font-black flex items-center justify-center gap-1.5 transition cursor-pointer active:translate-y-1 ${
                 currentStepIndex === totalSteps - 1
-                  ? "bg-slate-100 border-slate-200 text-slate-400 cursor-not-allowed border-b-2"
+                  ? "bg-slate-100 border-slate-200 text-slate-400 cursor-not-allowed border-b-2 opacity-60"
                   : "bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-500 hover:to-amber-700 text-slate-950 border-b-4 border-amber-700 shadow-lg shadow-amber-500/25"
               }`}
             >

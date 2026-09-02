@@ -16,24 +16,8 @@ export const MascotCharacter: React.FC<MascotCharacterProps> = ({
   expression = "happy",
   showShadow = true,
 }) => {
-  const [isBlinking, setIsBlinking] = useState(false);
   const isExcited = expression === "excited" || expression === "cheering";
   const isEncouraging = expression === "encouraging";
-
-  useEffect(() => {
-    let blinkTimer: NodeJS.Timeout;
-    const interval = setInterval(() => {
-      setIsBlinking(true);
-      blinkTimer = setTimeout(() => {
-        setIsBlinking(false);
-      }, 170);
-    }, 3000);
-
-    return () => {
-      clearInterval(interval);
-      clearTimeout(blinkTimer);
-    };
-  }, []);
 
   return (
     <motion.div
@@ -234,74 +218,40 @@ export const MascotCharacter: React.FC<MascotCharacterProps> = ({
         />
 
         {/* 7. CHEEKS (Cute Pink Blushes) */}
-        <ellipse cx="66" cy="118" rx="10" ry="6" fill="url(#mascotBlush)" />
-        <ellipse cx="134" cy="118" rx="10" ry="6" fill="url(#mascotBlush)" />
+        <ellipse cx="65" cy="115" rx="11" ry="6.5" fill="#ff7eb6" opacity="0.85" />
+        <ellipse cx="135" cy="115" rx="11" ry="6.5" fill="#ff7eb6" opacity="0.85" />
 
-        {/* 8. EYES */}
-        {expression === "wink" ? (
-          <g>
-            {/* Left Eye: Happy Arch ^ */}
-            <path
-              d="M 72,104 C 72,94 88,94 88,104"
-              fill="none"
-              stroke="#310363"
-              strokeWidth="5"
-              strokeLinecap="round"
-            />
-            {/* Right Eye: Wink Line - */}
-            <line
-              x1="112"
-              y1="100"
-              x2="128"
-              y2="100"
-              stroke="#310363"
-              strokeWidth="5"
-              strokeLinecap="round"
-            />
-          </g>
-        ) : (
-          <g>
-            {!isBlinking ? (
-              /* ✨ OPEN SHINY OVAL EYES (Matching User Image) */
-              <g>
-                {/* Left Eye */}
-                <ellipse cx="79" cy="102" rx="9.5" ry="12.5" fill="#240c47" />
-                <circle cx="75.5" cy="98" r="4.2" fill="#ffffff" />
+        {/* 8. EYES (Cute Smiling Closed Arcs ^ ^ Exactly Matching User Image) */}
+        <g id="mascotEyes">
+          {/* Left Eye: Cute Happy Smiling Arch ^ */}
+          <path
+            d="M 72,102 C 72,88 92,88 92,102"
+            fill="none"
+            stroke="#220946"
+            strokeWidth="6"
+            strokeLinecap="round"
+          />
+          {/* Right Eye: Cute Happy Smiling Arch ^ */}
+          <path
+            d="M 108,102 C 108,88 128,88 128,102"
+            fill="none"
+            stroke="#220946"
+            strokeWidth="6"
+            strokeLinecap="round"
+          />
+        </g>
 
-                {/* Right Eye */}
-                <ellipse cx="121" cy="102" rx="9.5" ry="12.5" fill="#240c47" />
-                <circle cx="117.5" cy="98" r="4.2" fill="#ffffff" />
-              </g>
-            ) : (
-              /* 😊 BLINKING / CLOSED HAPPY EYES */
-              <g>
-                <path
-                  d="M 68,103 C 68,93 90,93 90,103"
-                  fill="none"
-                  stroke="#240c47"
-                  strokeWidth="5"
-                  strokeLinecap="round"
-                />
-                <path
-                  d="M 110,103 C 110,93 132,93 132,103"
-                  fill="none"
-                  stroke="#240c47"
-                  strokeWidth="5"
-                  strokeLinecap="round"
-                />
-              </g>
-            )}
-          </g>
-        )}
-
-        {/* 9. MOUTH (High-Quality Cute Curved Smile matching reference image) */}
-        <path
-          d="M 88,118 C 88,127 112,127 112,118"
-          fill="none"
-          stroke="#310363"
-          strokeWidth="4"
-          strokeLinecap="round"
-        />
+        {/* 9. MOUTH (Joyful Open Smiling D-Shape Mouth Exactly Matching User Image) */}
+        <g id="mascotMouth">
+          <path
+            d="M 88,113 Q 100,112 112,113 C 112,127 88,127 88,113 Z"
+            fill="#220946"
+            stroke="#220946"
+            strokeWidth="2.5"
+            strokeLinejoin="round"
+            strokeLinecap="round"
+          />
+        </g>
 
         {/* Floating Sparkles around Mascot when excited */}
         {(isExcited || isEncouraging) && (

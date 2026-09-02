@@ -43,7 +43,6 @@ export const BlinkingMascotAvatar: React.FC<BlinkingMascotAvatarProps> = ({
   showStateSelector = false,
   onStateChange,
 }) => {
-  const [isBlinking, setIsBlinking] = useState(false);
   const [selectedState, setSelectedState] = useState<MascotState>(forcedState);
   const isBadini = language === 'badini' || language === 'ku';
 
@@ -51,18 +50,6 @@ export const BlinkingMascotAvatar: React.FC<BlinkingMascotAvatarProps> = ({
   useEffect(() => {
     setSelectedState(forcedState);
   }, [forcedState]);
-
-  // Periodic eye blinking effect
-  useEffect(() => {
-    const blinkInterval = setInterval(() => {
-      setIsBlinking(true);
-      setTimeout(() => {
-        setIsBlinking(false);
-      }, 220);
-    }, 3200);
-
-    return () => clearInterval(blinkInterval);
-  }, []);
 
   // Compute active state automatically if set to 'auto'
   const computedState = (): MascotState => {
@@ -354,7 +341,7 @@ export const BlinkingMascotAvatar: React.FC<BlinkingMascotAvatarProps> = ({
             </g>
           ) : null}
 
-          {/* --- EYES RENDERING BASED ON STATE --- */}
+          {/* --- EYES RENDERING BASED ON STATE (Smiling Eyes ^ ^) --- */}
           <g id="eyesGroup">
             {activeState === 'shortBreak' || activeState === 'longBreak' ? (
               /* Peaceful closed arc eyes ^ ^ */
@@ -380,14 +367,8 @@ export const BlinkingMascotAvatar: React.FC<BlinkingMascotAvatarProps> = ({
                 <path d="M84 90 L86 94 L90 95 L87 98 L88 102 L84 100 L80 102 L81 98 L78 95 L82 94 Z" fill="#7c3aed" />
                 <path d="M116 90 L118 94 L122 95 L119 98 L120 102 L116 100 L112 102 L113 98 L110 95 L114 94 Z" fill="#7c3aed" />
               </>
-            ) : isBlinking ? (
-              /* Blink arc */
-              <>
-                <path d="M78 98 Q85 93 92 98" stroke="#2e1065" strokeWidth="4" strokeLinecap="round" fill="none" />
-                <path d="M108 98 Q115 93 122 98" stroke="#2e1065" strokeWidth="4" strokeLinecap="round" fill="none" />
-              </>
             ) : (
-              /* Default signature happy arch eyes */
+              /* Signature cute smiling arch eyes (^ ^) - چاڤێن ب گرنژین بێ گرتن و ڤەکرن */
               <>
                 <path d="M77 98 Q85 86 93 98" stroke="#2e1065" strokeWidth="5" strokeLinecap="round" fill="none" />
                 <path d="M107 98 Q115 86 123 98" stroke="#2e1065" strokeWidth="5" strokeLinecap="round" fill="none" />
@@ -412,8 +393,15 @@ export const BlinkingMascotAvatar: React.FC<BlinkingMascotAvatarProps> = ({
             /* Focused straight line mouth */
             <path d="M94 113 L106 113" stroke="#2e1065" strokeWidth="3.5" strokeLinecap="round" />
           ) : (
-            /* Standard happy smile */
-            <path d="M93 112 Q100 120 107 112" stroke="#2e1065" strokeWidth="4" strokeLinecap="round" fill="none" />
+            /* Standard open joyful smile matching user image */
+            <path
+              d="M 92,108 Q 100,107 108,108 C 108,119 92,119 92,108 Z"
+              fill="#2e1065"
+              stroke="#2e1065"
+              strokeWidth="1.5"
+              strokeLinejoin="round"
+              strokeLinecap="round"
+            />
           )}
 
           {/* CHEEK BLUSH */}

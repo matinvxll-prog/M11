@@ -808,10 +808,16 @@ export const QuizRunnerModal: React.FC<QuizRunnerModalProps> = ({
 
                 {/* 2. META PILLS ROW (4 Pills) */}
                 <div className="grid grid-cols-4 gap-2 sm:gap-3 text-center shrink-0">
-                  {/* Pill 1: Year */}
-                  <div className="bg-white border border-purple-100/90 rounded-xl md:rounded-2xl py-2 px-1 shadow-xs flex items-center justify-center gap-1.5">
-                    <span className="text-amber-500 font-extrabold text-xs sm:text-sm md:text-base">2024</span>
-                    <span className="text-purple-950 font-bold text-[10px] sm:text-xs md:text-sm">وزاری</span>
+                  {/* Pill 1: Year & Session */}
+                  <div 
+                    className="bg-white border border-purple-100/90 rounded-xl md:rounded-2xl py-2 px-1.5 shadow-xs flex items-center justify-center gap-1 text-center min-w-0"
+                    title={currentQuestion?.year ? currentQuestion.year.replace(/الوزاري/g, "وزاری") : (language === "badini" ? "وزاری" : "وزاری")}
+                  >
+                    <span className="text-amber-500 font-extrabold text-[11px] sm:text-xs md:text-sm truncate">
+                      {currentQuestion?.year
+                        ? currentQuestion.year.replace(/الوزاري/g, "وزاری")
+                        : (language === "badini" ? "وزاری" : "وزاری")}
+                    </span>
                   </div>
 
                   {/* Pill 2: Grade */}
@@ -1038,7 +1044,9 @@ export const QuizRunnerModal: React.FC<QuizRunnerModalProps> = ({
                             <div className="w-5 h-5 rounded-full border-2 border-purple-200 bg-slate-50/50 shrink-0" />
                           )}
 
-                          <span className="leading-snug text-xs sm:text-sm md:text-base">{opt}</span>
+                          <span className="leading-snug text-xs sm:text-sm md:text-base">
+                            {typeof opt === "string" ? opt.replace(/^[A-D]\s*[-–:]\s*/i, "") : opt}
+                          </span>
                         </div>
 
                         {/* Letter Badge (A, B, C, D) on Right */}

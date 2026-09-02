@@ -20,15 +20,15 @@ export const TeacherMascotPointer: React.FC<TeacherMascotPointerProps> = ({
 }) => {
   const [isBlinking, setIsBlinking] = useState(false);
 
-  // 👀 Natural, Smooth Blinking Cycle (Every ~3 seconds)
+  // 👀 Smooth Natural Blinking (Closing and Opening) for Teacher Mascot Only
   useEffect(() => {
     let blinkTimer: NodeJS.Timeout;
     const interval = setInterval(() => {
       setIsBlinking(true);
       blinkTimer = setTimeout(() => {
         setIsBlinking(false);
-      }, 170);
-    }, 3000);
+      }, 180);
+    }, 3200);
 
     return () => {
       clearInterval(interval);
@@ -344,20 +344,20 @@ export const TeacherMascotPointer: React.FC<TeacherMascotPointerProps> = ({
               <ellipse cx="78" cy="98" rx="9.5" ry="5.5" fill="#f472b6" opacity="0.75" />
               <ellipse cx="162" cy="98" rx="9.5" ry="5.5" fill="#f472b6" opacity="0.75" />
 
-              {/* 👀 BIG SHINY ANIME/CHIBI EYES (وەک وێنەیێ تە یێ دیارکری ب بریسکان دگەل چاڤگرتن و ڤەکرن) */}
-              <g>
+              {/* 👀 SHINY ANIME EYES WITH BLINKING (Exact Match to User Close-Up Image & Blinking Animation) */}
+              <g id="teacherEyes">
                 {!isBlinking ? (
-                  /* ✨ OPEN SHINY OVAL EYES (Exact Match to User Image) */
+                  /* ✨ OPEN SHINY OVAL EYES (Exact Match to User Image 2) */
                   <g>
-                    {/* Left Eye: Dark Oval Pupil */}
-                    <ellipse cx="98" cy="86" rx="7.2" ry="9.6" fill="#1b1238" />
-                    {/* Left Eye: Big White Shiny Catchlight */}
-                    <circle cx="95.5" cy="82.8" r="3" fill="#ffffff" />
+                    {/* Left Eye: Dark Purple/Navy Oval Pupil */}
+                    <ellipse cx="98" cy="86" rx="7.5" ry="10" fill="#240c47" />
+                    {/* Left Eye: White Shiny Catchlight */}
+                    <circle cx="95.2" cy="82.4" r="3.2" fill="#ffffff" />
 
-                    {/* Right Eye: Dark Oval Pupil */}
-                    <ellipse cx="142" cy="86" rx="7.2" ry="9.6" fill="#1b1238" />
-                    {/* Right Eye: Big White Shiny Catchlight */}
-                    <circle cx="139.5" cy="82.8" r="3" fill="#ffffff" />
+                    {/* Right Eye: Dark Purple/Navy Oval Pupil */}
+                    <ellipse cx="142" cy="86" rx="7.5" ry="10" fill="#240c47" />
+                    {/* Right Eye: White Shiny Catchlight */}
+                    <circle cx="139.2" cy="82.4" r="3.2" fill="#ffffff" />
                   </g>
                 ) : (
                   /* 😊 BLINKING / CLOSED HAPPY SMILE EYES */
@@ -366,16 +366,16 @@ export const TeacherMascotPointer: React.FC<TeacherMascotPointerProps> = ({
                     <path
                       d="M 90,87 C 90,80 106,80 106,87"
                       fill="none"
-                      stroke="#1b1238"
-                      strokeWidth="3.8"
+                      stroke="#240c47"
+                      strokeWidth="4"
                       strokeLinecap="round"
                     />
                     {/* Right Eye: Closed Curve */}
                     <path
                       d="M 134,87 C 134,80 150,80 150,87"
                       fill="none"
-                      stroke="#1b1238"
-                      strokeWidth="3.8"
+                      stroke="#240c47"
+                      strokeWidth="4"
                       strokeLinecap="round"
                     />
                   </g>
@@ -416,13 +416,14 @@ export const TeacherMascotPointer: React.FC<TeacherMascotPointerProps> = ({
                 <path d="M 134,79 Q 140,75 146,77" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" fill="none" opacity="0.85" />
               </g>
 
-              {/* 😊 CUTE SMILING MOUTH (گرنژینا دەڤی بێ ئەزمان) */}
+              {/* 😊 CUTE JOYFUL OPEN SMILING MOUTH (دەڤێ ڤەکری وەک وێنەی) */}
               <g transform="translate(120, 105)">
                 <path
-                  d="M -7.5,-0.5 C -7.5,6.5 7.5,6.5 7.5,-0.5"
-                  fill="none"
+                  d="M -7.5,-2 Q 0,-2.5 7.5,-2 C 7.5,6.5 -7.5,6.5 -7.5,-2 Z"
+                  fill="#16171e"
                   stroke="#16171e"
-                  strokeWidth="3.4"
+                  strokeWidth="1.5"
+                  strokeLinejoin="round"
                   strokeLinecap="round"
                 />
               </g>

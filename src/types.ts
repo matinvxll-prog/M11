@@ -58,6 +58,7 @@ export interface Question {
   explanationBadini?: string;
   explanationEn: string;
   grammarBreakdown?: GrammarBreakdown;
+  tags?: string[];
   xp: number;
 }
 
