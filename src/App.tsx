@@ -7,7 +7,7 @@ export default function App() {
   const [showSplash, setShowSplash] = useState(false);
 
   return (
-    <div className="relative min-h-screen bg-slate-950 text-white">
+    <div className="relative min-h-screen bg-white text-slate-900">
       <AnimatePresence mode="wait">
         {showSplash ? (
           <motion.div

@@ -80,7 +80,7 @@ interface DashboardProps {
 
 export default function Dashboard({ onReplaySplash }: DashboardProps) {
   const [language, setLanguage] = useState<Language>("badini");
-  const [activeTab, setActiveTab] = useState<NavTab>("subjects");
+  const [activeTab, setActiveTab] = useState<NavTab>("home");
   const [selectedSubjectId, setSelectedSubjectId] = useState<SubjectId | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -262,7 +262,7 @@ export default function Dashboard({ onReplaySplash }: DashboardProps) {
   return (
     <div
       dir="rtl"
-      className={`min-h-screen ${isDarkMode || activeTab === "exams" ? "bg-[#090a16] text-slate-100" : "bg-[#f4f3f8] text-slate-900"} font-sans flex flex-col selection:bg-purple-500 selection:text-white`}
+      className={`min-h-screen ${isDarkMode ? "bg-[#090a16] text-slate-100" : "bg-[#f7f5fc] text-slate-900"} font-sans flex flex-col selection:bg-purple-500 selection:text-white`}
     >
       {/* Top Header Navbar */}
       {activeTab !== "studyPlan" && activeTab !== "pomodoro" && activeTab !== "exams" && activeTab !== "subjects" && (
@@ -374,6 +374,17 @@ export default function Dashboard({ onReplaySplash }: DashboardProps) {
               {/* HOME TAB */}
               {activeTab === "home" && (
                 <div className="space-y-6 sm:space-y-8">
+                  {/* Hero Welcome Banner */}
+                  <WelcomeBanner
+                    user={userProfile}
+                    language={language}
+                    isDarkMode={isDarkMode}
+                    onStartQuiz={() => handleStartQuizForSubject("math")}
+                    onStartDailyChallenge={() => handleStartQuizForSubject("physics")}
+                    onOpenAiTutor={() => setShowAiTutor(true)}
+                    onOpenPremium={() => setShowPremium(true)}
+                  />
+
                   {/* All DEGEL QUTABI Sections & Tools */}
                   <AllSectionsTopHub
                     language={language}
@@ -386,6 +397,24 @@ export default function Dashboard({ onReplaySplash }: DashboardProps) {
                     onOpenCalculator={() => setShowCalculator(true)}
                     onOpenDictionary={() => setShowDictionary(true)}
                   />
+
+                  {/* 8 SUBJECTS GRID (Directly matching User's Reference Design) */}
+                  <div className="w-full">
+                    <SubjectsGrid
+                      subjects={subjectsList}
+                      language={language}
+                      isDarkMode={isDarkMode}
+                      onSelectSubject={(id) => {
+                        setSelectedSubjectId(id);
+                        setActiveTab("subjects");
+                      }}
+                      onStartQuiz={(id) => handleStartQuizForSubject(id)}
+                      onOpenStudyPlan={() => handleSelectTab("studyPlan")}
+                      onViewAll={() => handleSelectTab("subjects")}
+                      showBanner={false}
+                      onOpenAiTutor={() => setShowAiTutor(true)}
+                    />
+                  </div>
 
                   {/* Grade 12 Ministry Exam System Hub */}
                   <Grade12PrepSystemHub
@@ -454,7 +483,7 @@ export default function Dashboard({ onReplaySplash }: DashboardProps) {
                     onOpenAiTutor={() => setShowAiTutor(true)}
                   />
                 ) : (
-                  <div className="w-full min-h-screen bg-[#f4effa] dark:bg-[#0c0926] p-3 sm:p-6 lg:p-8">
+                  <div className="w-full min-h-screen bg-[#f7f5fc] dark:bg-[#0c0926] p-3 sm:p-6 lg:p-8">
                     <div className="w-full max-w-7xl 2xl:max-w-[1550px] mx-auto">
                       <SubjectsGrid
                         subjects={subjectsList}

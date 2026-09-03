@@ -161,39 +161,21 @@ export const ExamsView: React.FC<ExamsViewProps> = ({ language, onStartExam, onB
   ];
 
   return (
-    <div className="w-full relative space-y-6 sm:space-y-8 min-h-screen bg-[#0B0820] text-slate-100 p-2 sm:p-4 rounded-3xl overflow-hidden">
-      {/* 🌌 Deep Dark Fantasy Ambient Background Layer */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0B0820] via-[#120B35] to-[#0B0820] pointer-events-none rounded-3xl" />
-
-      {/* Radial Lights & Glowing Nebula Orbs */}
-      <div className="absolute -top-40 -left-40 w-[500px] h-[500px] bg-purple-600/30 rounded-full blur-[140px] pointer-events-none animate-pulse" />
-      <div className="absolute top-1/3 -right-40 w-[550px] h-[550px] bg-indigo-600/25 rounded-full blur-[160px] pointer-events-none" />
-      <div className="absolute bottom-10 left-1/4 w-[600px] h-[600px] bg-purple-900/20 rounded-full blur-[180px] pointer-events-none" />
-
-      {/* Floating Sparkles & Star Particles Overlay */}
-      <div className="absolute inset-0 opacity-40 pointer-events-none overflow-hidden rounded-3xl">
-        <div className="absolute top-12 left-1/5 w-1.5 h-1.5 bg-purple-300 rounded-full blur-[0.5px] animate-ping" />
-        <div className="absolute top-1/4 right-1/4 w-2 h-2 bg-amber-200 rounded-full blur-[0.5px] animate-pulse" />
-        <div className="absolute bottom-1/3 left-12 w-1.5 h-1.5 bg-cyan-300 rounded-full blur-[0.5px]" />
-        <div className="absolute bottom-20 right-1/3 w-2 h-2 bg-pink-300 rounded-full blur-[0.5px] animate-ping" />
-        <Star className="absolute top-20 right-16 w-3 h-3 text-purple-400 opacity-60 animate-spin" style={{ animationDuration: "12s" }} />
-        <Star className="absolute bottom-32 left-24 w-4 h-4 text-amber-300 opacity-50 animate-bounce" />
-      </div>
-
+    <div className="w-full relative space-y-6 sm:space-y-8 min-h-screen bg-[#f7f5fc] text-slate-800 p-2 sm:p-4 rounded-3xl overflow-hidden">
       {/* Top Header Glassmorphism Section */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6 sm:p-8 rounded-[26px] bg-[#1a103c]/85 backdrop-blur-xl border border-white/[0.08] shadow-[0_20px_60px_rgba(120,70,255,0.25)]"
+        className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6 sm:p-8 rounded-[26px] bg-white border border-purple-100 shadow-[0_10px_30px_rgba(147,51,234,0.06)]"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
           {onBackToHome && (
             <button
               onClick={onBackToHome}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-[#251754] hover:bg-[#321f70] border border-purple-500/30 text-slate-100 hover:text-white font-black text-sm transition-all duration-300 shadow-lg active:scale-95 shrink-0 group"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-900 font-black text-sm transition-all duration-300 shadow-xs active:scale-95 shrink-0 group"
             >
-              <ArrowRight className="w-5 h-5 text-purple-400 group-hover:-translate-x-1 transition-transform" />
+              <ArrowRight className="w-5 h-5 text-purple-600 group-hover:-translate-x-1 transition-transform" />
               <span>
                 {language === "badini"
                   ? "زڤڕین بۆ سەرەتا"
@@ -204,13 +186,13 @@ export const ExamsView: React.FC<ExamsViewProps> = ({ language, onStartExam, onB
             </button>
           )}
           <div>
-            <div className="flex items-center gap-3 text-white font-black text-2xl sm:text-3xl tracking-tight">
+            <div className="flex items-center gap-3 text-slate-900 font-black text-2xl sm:text-3xl tracking-tight">
               <span>{language === "badini" ? "تاقیکرنێن وزاری - بابەتێن پۆلا ۱۲" : language === "ku" ? "تاقیکردنەوەکانی وزاری - بابەتەکان" : "Ministerial Exams"}</span>
-              <div className="p-2 rounded-xl bg-purple-500/20 border border-purple-400/30 shadow-inner">
-                <Trophy className="w-6 h-6 text-amber-400 fill-amber-400/40 animate-pulse" />
+              <div className="p-2 rounded-xl bg-amber-50 border border-amber-200 shadow-inner">
+                <Trophy className="w-6 h-6 text-amber-500 fill-amber-400 animate-pulse" />
               </div>
             </div>
-            <p className="text-sm sm:text-base text-purple-200/80 font-bold mt-1.5">
+            <p className="text-sm sm:text-base text-purple-800 font-bold mt-1.5">
               {language === "badini"
                 ? "بابەتەکێ هەڵبژێره و دەست ب راهێنانێن پرسیارێن وزاری بکە!"
                 : language === "ku"
@@ -222,13 +204,13 @@ export const ExamsView: React.FC<ExamsViewProps> = ({ language, onStartExam, onB
 
         {/* Gamification Streak Badge */}
         <div className="flex items-center gap-3 shrink-0 flex-wrap sm:flex-nowrap">
-          <div className="px-5 py-3 rounded-2xl bg-[#22164d]/90 border border-amber-500/40 flex items-center gap-3.5 shadow-xl shrink-0">
-            <div className="p-2 rounded-xl bg-amber-500/20 border border-amber-400/30">
-              <Flame className="w-7 h-7 text-amber-400 fill-amber-400 animate-pulse" />
+          <div className="px-5 py-3 rounded-2xl bg-amber-50/80 border border-amber-200 flex items-center gap-3.5 shadow-sm shrink-0">
+            <div className="p-2 rounded-xl bg-amber-100 border border-amber-300">
+              <Flame className="w-7 h-7 text-amber-500 fill-amber-500 animate-pulse" />
             </div>
             <div className="text-right">
-              <span className="text-2xl font-black text-white leading-none block">18</span>
-              <span className="text-xs font-extrabold text-amber-300 block mt-0.5">
+              <span className="text-2xl font-black text-slate-900 leading-none block">18</span>
+              <span className="text-xs font-extrabold text-amber-700 block mt-0.5">
                 {language === "badini" ? "ڕۆژێن ڕێزبووی" : language === "ku" ? "ڕۆژی ڕێزبوو" : "Day Streak"}
               </span>
             </div>
@@ -250,45 +232,30 @@ export const ExamsView: React.FC<ExamsViewProps> = ({ language, onStartExam, onB
               whileHover={{ scale: 1.04, y: -8 }}
               whileTap={{ scale: 0.97 }}
               onClick={() => onStartExam(`تاقیکرنا وزاری - ${subName}`, sub.id)}
-              className={`group relative p-6 rounded-[26px] bg-[#1a103c]/90 backdrop-blur-xl border border-white/[0.07] ${sub.hoverBorder} transition-all duration-300 shadow-[0_20px_60px_rgba(120,70,255,0.25)] hover:shadow-[0_25px_70px_${sub.glowColor}] cursor-pointer flex flex-col justify-between items-center text-center overflow-hidden min-h-[280px]`}
+              className="group relative p-6 rounded-[26px] bg-white border border-purple-100 hover:border-purple-300 transition-all duration-300 shadow-[0_4px_25px_rgba(0,0,0,0.04)] hover:shadow-[0_15px_35px_rgba(147,51,234,0.1)] cursor-pointer flex flex-col justify-between items-center text-center overflow-hidden min-h-[280px]"
             >
-              {/* Subtle Card Background Glow Effect */}
-              <div
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-[26px]"
-                style={{
-                  background: `radial-gradient(circle at 50% 20%, ${sub.glowColor}, transparent 70%)`
-                }}
-              />
-
               {/* Floating Sparkles behind Mascot */}
               <div className="absolute top-6 left-6 pointer-events-none opacity-40 group-hover:opacity-100 transition-opacity">
-                <Sparkles className="w-4 h-4 text-purple-300 animate-pulse" />
+                <Sparkles className="w-4 h-4 text-purple-400 animate-pulse" />
               </div>
               <div className="absolute top-12 right-6 pointer-events-none opacity-30 group-hover:opacity-80 transition-opacity">
-                <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-bounce" />
+                <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-bounce" />
               </div>
 
               {/* Top Level Badge */}
               <div
-                className={`absolute top-4 right-4 px-3.5 py-1 rounded-full text-xs font-black border ${sub.badgeBg} ${sub.badgeText} ${sub.badgeBorder} shadow-lg z-10 flex items-center gap-1.5 backdrop-blur-md`}
+                className="absolute top-4 right-4 px-3.5 py-1 rounded-full text-xs font-black border bg-purple-50 text-purple-700 border-purple-200 shadow-xs z-10 flex items-center gap-1.5"
               >
                 <span>{sub.levelBadge}</span>
               </div>
 
-              {/* Speech Bubble (English / Optional) */}
-              {sub.bubbleText && (
-                <div className="absolute top-4 left-4 bg-slate-800/90 text-white text-xs font-black px-2.5 py-1 rounded-full border border-blue-400/40 shadow-lg z-10 animate-bounce">
-                  {sub.bubbleText}
-                </div>
-              )}
-
               {/* Large 3D Mascot Illustration with Floating Effect */}
               <div className="relative mt-2 mb-3">
-                <div className="absolute inset-0 rounded-full bg-purple-500/20 blur-xl group-hover:bg-purple-400/40 transition-all pointer-events-none" />
+                <div className="absolute inset-0 rounded-full bg-purple-500/10 blur-xl group-hover:bg-purple-500/20 transition-all pointer-events-none" />
                 <motion.div
                   animate={{ y: [0, -6, 0] }}
                   transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: index * 0.2 }}
-                  className="w-32 h-32 sm:w-36 sm:h-36 rounded-full overflow-hidden p-1 bg-gradient-to-b from-purple-400/30 to-indigo-950/80 border border-purple-400/40 shadow-2xl relative z-10 group-hover:scale-105 transition-transform duration-300"
+                  className="w-32 h-32 sm:w-36 sm:h-36 rounded-full overflow-hidden p-1 bg-gradient-to-b from-purple-100 to-purple-50 border border-purple-200 shadow-md relative z-10 group-hover:scale-105 transition-transform duration-300"
                 >
                   <img
                     src={sub.mascotImg}
@@ -300,27 +267,27 @@ export const ExamsView: React.FC<ExamsViewProps> = ({ language, onStartExam, onB
 
               {/* Subject Title */}
               <div className="w-full relative z-10">
-                <h3 className="text-xl sm:text-2xl font-black text-white group-hover:text-purple-200 transition-colors tracking-tight">
+                <h3 className="text-xl sm:text-2xl font-black text-slate-900 group-hover:text-purple-700 transition-colors tracking-tight">
                   {subName}
                 </h3>
               </div>
 
               {/* 10px Height Animated Progress Bar & Percentage */}
               <div className="w-full mt-4 space-y-2 relative z-10">
-                <div className="flex items-center justify-between text-xs font-black px-1 text-slate-300">
-                  <span className="text-purple-300/90 font-extrabold">
+                <div className="flex items-center justify-between text-xs font-black px-1 text-slate-500">
+                  <span className="text-purple-700 font-extrabold">
                     {language === "badini" ? "پیشکەفتن" : language === "ku" ? "پێشکەوتن" : "Progress"}
                   </span>
-                  <span className="text-white font-mono text-sm">{sub.progressPercent}%</span>
+                  <span className="text-slate-900 font-mono text-sm">{sub.progressPercent}%</span>
                 </div>
 
                 {/* 10px height fully rounded container */}
-                <div className="w-full bg-[#0d0726] h-[10px] rounded-full overflow-hidden p-[1px] border border-white/10 shadow-inner">
+                <div className="w-full bg-slate-100 h-[10px] rounded-full overflow-hidden p-[1px] border border-slate-200 shadow-inner">
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${sub.progressPercent}%` }}
                     transition={{ delay: 0.2 + index * 0.05, duration: 1, ease: "easeOut" }}
-                    className={`h-full rounded-full bg-gradient-to-r ${sub.progressBarGradient} shadow-md`}
+                    className={`h-full rounded-full bg-gradient-to-r ${sub.progressBarGradient} shadow-xs`}
                   />
                 </div>
               </div>
@@ -334,11 +301,11 @@ export const ExamsView: React.FC<ExamsViewProps> = ({ language, onStartExam, onB
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 0.5 }}
-        className="relative z-10 p-6 sm:p-8 rounded-[26px] bg-[#1a103c]/85 backdrop-blur-xl border border-white/[0.08] space-y-4 shadow-[0_20px_60px_rgba(120,70,255,0.25)]"
+        className="relative z-10 p-6 sm:p-8 rounded-[26px] bg-white border border-purple-100 space-y-4 shadow-[0_10px_30px_rgba(147,51,234,0.06)]"
       >
-        <div className="flex items-center justify-between font-black text-lg sm:text-xl text-white">
+        <div className="flex items-center justify-between font-black text-lg sm:text-xl text-slate-900">
           <div className="flex items-center gap-2.5">
-            <Bookmark className="w-5 h-5 text-purple-400" />
+            <Bookmark className="w-5 h-5 text-purple-600" />
             <span>
               {language === "badini"
                 ? "ڕێژەیا گشتی یا سەرکەوتنێ"
@@ -347,22 +314,22 @@ export const ExamsView: React.FC<ExamsViewProps> = ({ language, onStartExam, onB
                 : "Overall Progress"}
             </span>
           </div>
-          <span className="text-amber-400 font-mono text-xl">62%</span>
+          <span className="text-amber-600 font-mono text-xl">62%</span>
         </div>
 
         {/* Full Width Progress Bar */}
-        <div className="w-full bg-[#0d0726] h-3.5 rounded-full overflow-hidden p-0.5 border border-purple-500/30">
+        <div className="w-full bg-purple-50 h-3.5 rounded-full overflow-hidden p-0.5 border border-purple-200">
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: "62%" }}
             transition={{ duration: 1.2, ease: "easeOut" }}
-            className="h-full bg-gradient-to-r from-purple-500 via-indigo-400 to-amber-400 rounded-full shadow-lg shadow-purple-500/50"
+            className="h-full bg-gradient-to-r from-purple-500 via-indigo-500 to-amber-500 rounded-full shadow-md"
           />
         </div>
 
         {/* Motivational Mascot Footer */}
-        <div className="flex items-center justify-center gap-2 pt-2 text-sm sm:text-base font-black text-purple-200/90">
-          <Sparkles className="w-5 h-5 text-amber-400 animate-spin" style={{ animationDuration: "6s" }} />
+        <div className="flex items-center justify-center gap-2 pt-2 text-sm sm:text-base font-black text-purple-900">
+          <Sparkles className="w-5 h-5 text-amber-500 animate-spin" style={{ animationDuration: "6s" }} />
           <span>
             {language === "badini"
               ? "کارەکێ نایاب! بەردەوام بە بەرەڤ سەرکەوتنا مەزن ڕێژەیا ۹۰٪+."
@@ -370,7 +337,7 @@ export const ExamsView: React.FC<ExamsViewProps> = ({ language, onStartExam, onB
               ? "کارێکی نایاب! بەردەوام بە بەرەو سەرکەوتنی گەورە ٩٠٪+."
               : "Great job! Keep grinding for 90%+ in ministerial exams."}
           </span>
-          <Sparkles className="w-5 h-5 text-amber-400 animate-spin" style={{ animationDuration: "6s" }} />
+          <Sparkles className="w-5 h-5 text-amber-500 animate-spin" style={{ animationDuration: "6s" }} />
         </div>
       </motion.div>
     </div>

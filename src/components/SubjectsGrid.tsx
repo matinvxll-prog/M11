@@ -22,6 +22,7 @@ import {
   ChevronDown
 } from "lucide-react";
 import { Language, Subject, SubjectId } from "../types";
+import { SubjectMascot3D } from "./SubjectMascot3D";
 
 import mathMascot from "../assets/images/math_mascot_1785970327866.jpg";
 import chemMascot from "../assets/images/chemistry_mascot_1785970339483.jpg";
@@ -54,12 +55,12 @@ interface SubjectCardConfig {
   nameBadini: string;
   nameKu: string;
   nameEn: string;
-  badgeIcon: string;
-  badgeBoxClass: string;
-  questionsCount: number;
+  badgeType: "math" | "physics" | "chem" | "bio" | "rel" | "ara" | "kur" | "eng";
+  lessonsCount: number;
   extraSub?: string;
   progressPercent: number;
   color: string;
+  trackColor: string;
   cardBg: string;
   borderColor: string;
   category: "scientific" | "literary" | "common";
@@ -70,16 +71,16 @@ const subjectConfigs: Record<string, SubjectCardConfig> = {
   math: {
     id: "math",
     mascot: mathMascot,
-    nameBadini: "ریاضی",
-    nameKu: "ریاضی",
+    nameBadini: "بیرکاری",
+    nameKu: "بیرکاری",
     nameEn: "Mathematics",
-    badgeIcon: "+ − ✕ ✕",
-    badgeBoxClass: "bg-emerald-50 text-emerald-600 border border-emerald-200/80",
-    questionsCount: 1250,
+    badgeType: "math",
+    lessonsCount: 48,
     progressPercent: 75,
     color: "#10b981",
-    cardBg: "bg-gradient-to-b from-white via-white to-emerald-50/40",
-    borderColor: "border-slate-100/90 hover:border-emerald-300",
+    trackColor: "#d1fae5",
+    cardBg: "bg-gradient-to-br from-white via-white to-[#edfbf3] dark:bg-[#181339]",
+    borderColor: "border-[#e5f7ed] dark:border-purple-900/40 hover:border-emerald-300 shadow-[0_4px_20px_rgba(16,185,129,0.04)]",
     category: "scientific"
   },
   physics: {
@@ -88,13 +89,13 @@ const subjectConfigs: Record<string, SubjectCardConfig> = {
     nameBadini: "فیزیا",
     nameKu: "فیزیا",
     nameEn: "Physics",
-    badgeIcon: "⚛️",
-    badgeBoxClass: "bg-blue-50 text-blue-600 border border-blue-200/80",
-    questionsCount: 980,
+    badgeType: "physics",
+    lessonsCount: 38,
     progressPercent: 60,
     color: "#2563eb",
-    cardBg: "bg-gradient-to-b from-white via-white to-blue-50/40",
-    borderColor: "border-slate-100/90 hover:border-blue-300",
+    trackColor: "#dbeafe",
+    cardBg: "bg-gradient-to-br from-white via-white to-[#f0f5fe] dark:bg-[#181339]",
+    borderColor: "border-[#e5effd] dark:border-purple-900/40 hover:border-blue-300 shadow-[0_4px_20px_rgba(37,99,235,0.04)]",
     category: "scientific"
   },
   chemistry: {
@@ -103,59 +104,59 @@ const subjectConfigs: Record<string, SubjectCardConfig> = {
     nameBadini: "کیمیا",
     nameKu: "کیمیا",
     nameEn: "Chemistry",
-    badgeIcon: "🧪",
-    badgeBoxClass: "bg-purple-50 text-purple-600 border border-purple-200/80",
-    questionsCount: 870,
+    badgeType: "chem",
+    lessonsCount: 36,
     progressPercent: 55,
     color: "#9333ea",
-    cardBg: "bg-gradient-to-b from-white via-white to-purple-50/40",
-    borderColor: "border-slate-100/90 hover:border-purple-300",
+    trackColor: "#f3e8ff",
+    cardBg: "bg-gradient-to-br from-white via-white to-[#f7f2fe] dark:bg-[#181339]",
+    borderColor: "border-[#f1e7fd] dark:border-purple-900/40 hover:border-purple-300 shadow-[0_4px_20px_rgba(147,51,234,0.04)]",
     category: "scientific"
   },
   biology: {
     id: "biology",
     mascot: bioMascot,
-    nameBadini: "زیندۆزانستی",
-    nameKu: "زیندۆزانستی",
+    nameBadini: "زیندەوەرناسی",
+    nameKu: "زیندەزانی",
     nameEn: "Biology",
-    badgeIcon: "🧬",
-    badgeBoxClass: "bg-orange-50 text-orange-600 border border-orange-200/80",
-    questionsCount: 950,
+    badgeType: "bio",
+    lessonsCount: 42,
     progressPercent: 65,
     color: "#ea580c",
-    cardBg: "bg-gradient-to-b from-white via-white to-orange-50/40",
-    borderColor: "border-slate-100/90 hover:border-orange-300",
+    trackColor: "#ffedd5",
+    cardBg: "bg-gradient-to-br from-white via-white to-[#fef5ec] dark:bg-[#181339]",
+    borderColor: "border-[#fdecdb] dark:border-purple-900/40 hover:border-orange-300 shadow-[0_4px_20px_rgba(234,88,12,0.04)]",
     category: "scientific"
   },
-  // Row 2 (RTL: Nishandi on the right, Arabic, Kurdish, English on the left)
-  religion: {
-    id: "religion",
-    mascot: relMascot,
-    nameBadini: "نیشاندی",
-    nameKu: "نیشاندی",
-    nameEn: "General & Islamic Studies",
-    badgeIcon: "Aa",
-    badgeBoxClass: "bg-sky-50 text-sky-600 border border-sky-200/80 font-black",
-    questionsCount: 760,
+  // Row 2: English, Arabic, Kurdish, Religion
+  english: {
+    id: "english",
+    mascot: engMascot,
+    nameBadini: "ئینگلیزی",
+    nameKu: "ئینگلیزی",
+    nameEn: "English",
+    badgeType: "eng",
+    lessonsCount: 32,
     progressPercent: 80,
-    color: "#0284c7",
-    cardBg: "bg-gradient-to-b from-white via-white to-sky-50/40",
-    borderColor: "border-slate-100/90 hover:border-sky-300",
+    color: "#06b6d4",
+    trackColor: "#ecfeff",
+    cardBg: "bg-gradient-to-br from-white via-white to-[#f0fdfa] dark:bg-[#181339]",
+    borderColor: "border-[#ccfbf1] dark:border-purple-900/40 hover:border-cyan-300 shadow-[0_4px_20px_rgba(6,182,212,0.04)]",
     category: "common"
   },
   arabic: {
     id: "arabic",
     mascot: araMascot,
-    nameBadini: "عەربی",
-    nameKu: "عەربی",
+    nameBadini: "عەرەبی",
+    nameKu: "عەرەبی",
     nameEn: "Arabic",
-    badgeIcon: "ف",
-    badgeBoxClass: "bg-amber-50 text-amber-600 border border-amber-200/80 font-bold",
-    questionsCount: 650,
+    badgeType: "ara",
+    lessonsCount: 30,
     progressPercent: 70,
     color: "#d97706",
-    cardBg: "bg-gradient-to-b from-white via-white to-amber-50/40",
-    borderColor: "border-slate-100/90 hover:border-amber-300",
+    trackColor: "#fef3c7",
+    cardBg: "bg-gradient-to-br from-white via-white to-[#fefaf0] dark:bg-[#181339]",
+    borderColor: "border-[#fef2d3] dark:border-purple-900/40 hover:border-amber-300 shadow-[0_4px_20px_rgba(217,119,6,0.04)]",
     category: "common"
   },
   kurdish: {
@@ -164,29 +165,29 @@ const subjectConfigs: Record<string, SubjectCardConfig> = {
     nameBadini: "کوردی",
     nameKu: "کوردی",
     nameEn: "Kurdish",
-    badgeIcon: "ێ",
-    badgeBoxClass: "bg-pink-50 text-pink-600 border border-pink-200/80 font-bold",
-    questionsCount: 540,
+    badgeType: "kur",
+    lessonsCount: 26,
     progressPercent: 45,
     color: "#db2777",
-    cardBg: "bg-gradient-to-b from-white via-white to-pink-50/40",
-    borderColor: "border-slate-100/90 hover:border-pink-300",
+    trackColor: "#fce7f3",
+    cardBg: "bg-gradient-to-br from-white via-white to-[#fdf2f7] dark:bg-[#181339]",
+    borderColor: "border-[#fce2ee] dark:border-purple-900/40 hover:border-pink-300 shadow-[0_4px_20px_rgba(219,39,119,0.04)]",
     category: "common"
   },
-  english: {
-    id: "english",
-    mascot: engMascot,
-    nameBadini: "ئینگلیزی",
-    nameKu: "ئینگلیزی",
-    nameEn: "English",
-    extraSub: "(بەرز و دیسانپشتگی)",
-    badgeIcon: "📖",
-    badgeBoxClass: "bg-teal-50 text-teal-600 border border-teal-200/80",
-    questionsCount: 480,
+  religion: {
+    id: "religion",
+    mascot: relMascot,
+    nameBadini: "ئاین",
+    nameKu: "ئاین",
+    nameEn: "Religion Education",
+    extraSub: "(پەروەردەیا ئیسلامی)",
+    badgeType: "rel",
+    lessonsCount: 22,
     progressPercent: 40,
     color: "#0d9488",
-    cardBg: "bg-gradient-to-b from-white via-white to-teal-50/40",
-    borderColor: "border-slate-100/90 hover:border-teal-300",
+    trackColor: "#ccfbf1",
+    cardBg: "bg-gradient-to-br from-white via-white to-[#f0fdf4] dark:bg-[#181339]",
+    borderColor: "border-[#d1fae5] dark:border-purple-900/40 hover:border-teal-300 shadow-[0_4px_20px_rgba(13,148,136,0.04)]",
     category: "common"
   }
 };
@@ -236,18 +237,18 @@ export const SubjectsGrid: React.FC<SubjectsGridProps> = ({
   const isBadini = language === "badini";
   const isKu = language === "ku";
 
-  // Ordered strictly according to the reference image in RTL:
-  // Row 1 (RTL): Math (Right) -> Physics -> Chemistry -> Biology (Left)
-  // Row 2 (RTL): Nishandi (Right) -> Arabic -> Kurdish -> English (Left)
+  // Default ordering:
+  // Row 1: Math -> Physics -> Chemistry -> Biology
+  // Row 2: English -> Arabic -> Kurdish -> Religion
   const defaultKeys = [
     "math",
     "physics",
     "chemistry",
     "biology",
-    "religion",
+    "english",
     "arabic",
     "kurdish",
-    "english"
+    "religion"
   ];
 
   const filteredConfigs = defaultKeys
@@ -277,38 +278,50 @@ export const SubjectsGrid: React.FC<SubjectsGridProps> = ({
   return (
     <div className="w-full space-y-5 select-none font-sans" dir="rtl">
       {/* ==================================================================== */}
-      {/* 1. TOP HERO BANNER (Directly matching Image Reference) */}
+      {/* 1. TOP HERO BANNER (White Background with Return Icon as requested) */}
       {/* ==================================================================== */}
       {showBanner && (
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="relative w-full rounded-[32px] sm:rounded-[38px] bg-gradient-to-r from-[#ece4f8] via-[#f7f2fd] to-[#eae0f8] dark:from-[#1b143f] dark:via-[#261754] dark:to-[#170e37] overflow-hidden p-6 sm:p-8 md:p-10 shadow-[0_4px_30px_rgba(147,51,234,0.06)] border border-white/90 dark:border-purple-800/40 flex flex-col md:flex-row items-center justify-between gap-6"
+          className="relative w-full rounded-[32px] sm:rounded-[38px] bg-white dark:bg-white overflow-hidden p-6 sm:p-8 md:p-10 shadow-[0_8px_30px_rgba(91,43,157,0.06)] border border-purple-100 dark:border-purple-200/90 flex flex-col md:flex-row items-center justify-between gap-6"
         >
-          {/* Subtle Ambient Cosmic Circles & Stars matching the image */}
+          {/* Subtle Ambient Cosmic Circles & Stars */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
-            {/* Glowing orbital ellipse around mascot on physical left */}
-            <div className="absolute top-1/2 left-8 md:left-16 -translate-y-1/2 w-64 h-32 md:w-80 md:h-40 border border-purple-300/40 dark:border-purple-400/20 rounded-full rotate-[-12deg]" />
-            <div className="absolute top-1/2 left-8 md:left-16 -translate-y-1/2 w-52 h-24 md:w-64 md:h-30 border border-indigo-200/30 dark:border-indigo-400/15 rounded-full rotate-[15deg]" />
+            {/* Soft orbital rings around mascot on left */}
+            <div className="absolute top-1/2 left-8 md:left-16 -translate-y-1/2 w-64 h-32 md:w-80 md:h-40 border border-purple-200/60 rounded-full rotate-[-12deg]" />
+            <div className="absolute top-1/2 left-8 md:left-16 -translate-y-1/2 w-52 h-24 md:w-64 md:h-30 border border-indigo-200/40 rounded-full rotate-[15deg]" />
 
-            {/* Faint stars */}
-            <span className="absolute top-8 left-1/3 text-purple-400/50 dark:text-purple-300/40 text-lg">✦</span>
-            <span className="absolute bottom-8 left-1/4 text-indigo-400/40 dark:text-indigo-300/30 text-sm">✨</span>
-            <span className="absolute top-12 right-1/4 text-purple-300/40 text-xs">✦</span>
+            {/* Subtle sparkling stars */}
+            <span className="absolute top-8 left-1/3 text-purple-400/60 text-lg">✦</span>
+            <span className="absolute bottom-8 left-1/4 text-indigo-400/50 text-sm">✨</span>
+            <span className="absolute top-12 right-1/4 text-purple-300/60 text-xs">✦</span>
           </div>
 
-          {/* Right in RTL: Title and Subtitle (FIRST child in RTL flex row) */}
+          {/* Right in RTL: Title, Subtitle, and Return Back Button */}
           <div className="relative z-10 flex flex-col items-center md:items-start text-center md:text-right flex-1">
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#5b2b9d] dark:text-purple-200 tracking-tight drop-shadow-xs">
-              {isBadini ? "بابەتین خوێندنی پۆلا ۱۲" : isKu ? "بابەتەکانی خوێندنی پۆلی ۱۲" : "Grade 12 Study Subjects"}
+            {/* Return Icon & Button (ئایکۆنێ زڤڕینێ) */}
+            {onBackToHome && (
+              <button
+                onClick={onBackToHome}
+                className="group inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-purple-50 hover:bg-purple-100/90 text-[#431e78] border border-purple-200/80 text-xs sm:text-sm font-black transition active:scale-95 shadow-xs mb-3.5 self-center md:self-start"
+                title={isBadini ? "زڤڕین بۆ سەرەتا" : isKu ? "گەڕانەوە بۆ سەرەکی" : "Back to Home"}
+              >
+                <ArrowRight className="w-4 h-4 text-[#5b2b9d] transition-transform group-hover:translate-x-1" />
+                <span>{isBadini ? "زڤڕین بۆ سەرەتا" : isKu ? "گەڕانەوە بۆ سەرەکی" : "Back to Home"}</span>
+              </button>
+            )}
+
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#431e78] dark:text-[#431e78] tracking-tight">
+              {isBadini ? "وانەگۆتن و وانەیێن پۆلا ۱۲" : isKu ? "وانەگوتن و وانەکانی پۆلی ۱۲" : "Grade 12 Lessons & Lectures"}
             </h1>
-            <p className="text-xs sm:text-sm md:text-base font-bold text-purple-900/75 dark:text-purple-300/80 mt-2 max-w-xl">
+            <p className="text-xs sm:text-sm md:text-base font-bold text-[#573587] dark:text-[#573587] mt-2 max-w-xl">
               {isBadini
-                ? "بابەتەکی هەڵبژێره دا دەست به راهێنان و پرسیاران بکە."
+                ? "بابەتەکی هەڵبژێرە دا دەست ب بینین و خواندنا وانەگۆتنێ، ڤیدیۆ و کورتکراوان بکەی."
                 : isKu
-                ? "بابەتێک هەڵبژێرە تا دەست بە ڕاهێنان و پرسیارەکان بکەیت."
-                : "Select a subject to start practice and exam questions."}
+                ? "بابەتێک هەڵبژێرە تا دەست بە بینین و خوێندنی وانەگوتن، ڤیدیۆ و کورتکراوەکان بکەیت."
+                : "Select a subject to watch video lectures, explanations, and lesson summaries."}
             </p>
           </div>
 
@@ -317,13 +330,13 @@ export const SubjectsGrid: React.FC<SubjectsGridProps> = ({
             <motion.div
               animate={{ y: [0, -7, 0] }}
               transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
-              className="w-32 h-32 sm:w-40 sm:h-40 md:w-44 md:h-44 flex items-center justify-center cursor-pointer"
+              className="w-32 h-32 sm:w-40 sm:h-40 md:w-44 md:h-44 rounded-3xl overflow-hidden bg-purple-50/80 border-2 border-purple-100 shadow-md flex items-center justify-center cursor-pointer p-1"
               onClick={() => setShowCountdownModal(true)}
             >
               <img
                 src={purpleMascotImg}
                 alt="Purple Mascot"
-                className="w-full h-full object-contain drop-shadow-[0_10px_20px_rgba(147,51,234,0.18)]"
+                className="w-full h-full object-cover rounded-2xl"
               />
             </motion.div>
           </div>
@@ -399,7 +412,7 @@ export const SubjectsGrid: React.FC<SubjectsGridProps> = ({
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={isBadini || isKu ? "...گەڕان لە بابەتەکان" : "Search subjects..."}
+              placeholder={isBadini ? "...گەڕیان د وانە و بابەتاندا" : isKu ? "...گەڕان لە وانە و بابەتەکاندا" : "Search lessons & subjects..."}
               className="w-48 sm:w-64 pl-4 pr-9 py-2 rounded-2xl text-xs font-bold bg-white/95 dark:bg-[#171336] border border-purple-100/90 dark:border-purple-800/60 text-slate-900 dark:text-white focus:border-purple-400 outline-none shadow-xs text-right placeholder:text-slate-400 dark:placeholder:text-slate-500"
             />
             <Search className="w-3.5 h-3.5 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -414,8 +427,19 @@ export const SubjectsGrid: React.FC<SubjectsGridProps> = ({
           </div>
         </div>
 
-        {/* Left side in RTL (SECOND in RTL flex): ✦ دەمریا هەمان ➔ */}
+        {/* Left side in RTL (SECOND in RTL flex): Back Button & ✦ All Subjects */}
         <div className="flex items-center gap-2">
+          {onBackToHome && (
+            <button
+              onClick={onBackToHome}
+              className="px-3.5 py-2 rounded-2xl bg-white dark:bg-[#171336] border border-purple-200/80 dark:border-purple-800/60 text-purple-900 dark:text-purple-200 font-bold text-xs flex items-center gap-1.5 shadow-xs hover:bg-purple-50 dark:hover:bg-purple-950/40 transition active:scale-95"
+              title={isBadini ? "زڤڕین بۆ لاپەڕێ سەرەکی" : isKu ? "گەڕانەوە بۆ سەرەکی" : "Back to Home"}
+            >
+              <ArrowRight className="w-3.5 h-3.5 text-[#5b2b9d] dark:text-purple-300" />
+              <span>{isBadini ? "زڤڕین" : isKu ? "گەڕانەوە" : "Back"}</span>
+            </button>
+          )}
+
           <button
             onClick={() => {
               setSelectedCategory("all");
@@ -424,8 +448,8 @@ export const SubjectsGrid: React.FC<SubjectsGridProps> = ({
             className="text-[#602d9c] dark:text-purple-300 hover:text-purple-900 dark:hover:text-white font-black text-xs sm:text-sm flex items-center gap-1.5 transition active:scale-95"
           >
             <span className="text-sm">✦</span>
-            <span>{isBadini ? "دەمریا هەمان" : isKu ? "دەمریا هەمان" : "All Subjects"}</span>
-            <span className="text-sm font-black leading-none">➔</span>
+            <span>{isBadini ? "هەمی بابەت" : isKu ? "هەموو بابەتەکان" : "All Subjects"}</span>
+            <span className="text-sm font-black leading-none">←</span>
           </button>
         </div>
       </div>
@@ -451,16 +475,37 @@ export const SubjectsGrid: React.FC<SubjectsGridProps> = ({
             >
               {/* Top-Right Badge Icon matching Image (e.g. ➕✖️, ⚛️, 🧪, 🧬, Aa, ف, ێ, 📖) */}
               <div className="absolute top-3.5 right-3.5 sm:top-4 sm:right-4 z-10">
-                <div
-                  className={`w-9 h-9 sm:w-10 sm:h-10 rounded-2xl flex items-center justify-center text-xs sm:text-sm font-black shadow-xs ${cfg.badgeBoxClass}`}
-                >
-                  {cfg.id === "math" ? (
-                    <div className="flex flex-col items-center justify-center font-black leading-none text-[11px] sm:text-xs">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-white/95 dark:bg-[#1e173e]/95 shadow-[0_2px_8px_rgba(0,0,0,0.04)] border border-white/90 dark:border-purple-800/40 flex items-center justify-center">
+                  {cfg.badgeType === "math" && (
+                    <div className="flex flex-col items-center justify-center font-black leading-none text-[10.5px] text-emerald-600">
                       <span className="tracking-wider">+ −</span>
-                      <span className="tracking-tighter text-[10px]">✕ ✕</span>
+                      <span className="tracking-tighter text-[9.5px]">✕ ✕</span>
                     </div>
-                  ) : (
-                    <span>{cfg.badgeIcon}</span>
+                  )}
+                  {cfg.badgeType === "physics" && (
+                    <div className="w-6 h-6 rounded-lg bg-[#5b2b9d] text-white flex items-center justify-center text-xs font-bold shadow-2xs">
+                      <span className="text-[12px] leading-none">⚛️</span>
+                    </div>
+                  )}
+                  {cfg.badgeType === "chem" && (
+                    <div className="w-6 h-6 rounded-lg bg-[#7c3aed] text-white flex items-center justify-center text-xs font-bold shadow-2xs">
+                      <span className="text-[12px] leading-none">🧪</span>
+                    </div>
+                  )}
+                  {cfg.badgeType === "bio" && (
+                    <span className="text-base sm:text-lg leading-none">🧬</span>
+                  )}
+                  {cfg.badgeType === "eng" && (
+                    <span className="font-black text-sm sm:text-base text-[#0891b2] tracking-tight">Aa</span>
+                  )}
+                  {cfg.badgeType === "ara" && (
+                    <span className="font-black text-base sm:text-lg text-[#d97706] leading-none">ف</span>
+                  )}
+                  {cfg.badgeType === "kur" && (
+                    <span className="font-black text-base sm:text-lg text-[#db2777] leading-none">ێ</span>
+                  )}
+                  {cfg.badgeType === "rel" && (
+                    <span className="text-base sm:text-lg leading-none">📖</span>
                   )}
                 </div>
               </div>
@@ -470,7 +515,7 @@ export const SubjectsGrid: React.FC<SubjectsGridProps> = ({
                 {/* Subject Title & Stats on Right (FIRST child in RTL flex) */}
                 <div className="flex flex-col items-start text-right flex-1 min-w-0 pr-1">
                   <h3
-                    className={`text-xl sm:text-2xl font-black transition-colors truncate w-full ${
+                    className={`text-lg sm:text-xl font-black transition-colors truncate w-full ${
                       isDarkMode ? "text-white group-hover:text-purple-300" : "text-slate-900"
                     }`}
                   >
@@ -478,30 +523,38 @@ export const SubjectsGrid: React.FC<SubjectsGridProps> = ({
                   </h3>
 
                   {cfg.extraSub && (
-                    <span className="text-[11px] font-bold text-slate-400 mt-0.5">
+                    <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 mt-0.5">
                       {cfg.extraSub}
                     </span>
                   )}
 
-                  <span className="text-xs sm:text-sm font-bold text-slate-500 dark:text-slate-400 mt-1">
-                    {cfg.questionsCount} پرسیار
-                  </span>
+                  <div className="flex items-center gap-1.5 mt-1">
+                    <span className="text-xs sm:text-sm font-bold text-slate-600 dark:text-slate-300">
+                      {cfg.lessonsCount} {isBadini || isKu ? "وانە" : "Lessons"}
+                    </span>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-purple-100/80 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 font-black">
+                      {isBadini ? "وانەگۆتن" : isKu ? "وانەگوتن" : "Lectures"}
+                    </span>
+                  </div>
                 </div>
 
-                {/* 3D Mascot Image on Left (SECOND child in RTL flex) */}
+                {/* 3D Mascot Character on Left (SECOND child in RTL flex) */}
                 <div className="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 flex items-center justify-center">
                   <img
                     src={cfg.mascot}
-                    alt={displayName}
-                    className="w-full h-full object-contain rounded-2xl drop-shadow-sm hover:scale-105 transition-transform duration-300"
+                    alt={isBadini ? cfg.nameBadini : isKu ? cfg.nameKu : cfg.nameEn}
+                    className="w-full h-full object-contain drop-shadow-md hover:scale-108 transition-transform duration-300 rounded-2xl"
                   />
                 </div>
               </div>
 
               {/* Bottom Progress Bar matching Image: Bar on Left, Percentage on Right */}
-              <div className="w-full pt-2 flex items-center gap-2.5" dir="ltr">
-                {/* Filled bar on the left */}
-                <div className="flex-1 h-2.5 sm:h-3 rounded-full bg-slate-100 dark:bg-slate-800/80 overflow-hidden">
+              <div className="w-full pt-2 flex items-center gap-3" dir="ltr">
+                {/* Filled bar on the left with custom track color */}
+                <div
+                  className="flex-1 h-2 sm:h-2.5 rounded-full overflow-hidden dark:bg-slate-800/80"
+                  style={{ backgroundColor: isDarkMode ? undefined : cfg.trackColor }}
+                >
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${cfg.progressPercent}%` }}
@@ -511,7 +564,7 @@ export const SubjectsGrid: React.FC<SubjectsGridProps> = ({
                   />
                 </div>
                 {/* Percentage text on the right */}
-                <span className="font-mono font-black text-xs sm:text-sm shrink-0" style={{ color: cfg.color }}>
+                <span className="font-mono font-black text-xs sm:text-sm text-slate-700 dark:text-slate-200 shrink-0">
                   {cfg.progressPercent}%
                 </span>
               </div>
@@ -523,59 +576,59 @@ export const SubjectsGrid: React.FC<SubjectsGridProps> = ({
       {/* ==================================================================== */}
       {/* 4. BOTTOM DAILY PLANNER BANNER (Directly matching Image Reference) */}
       {/* ==================================================================== */}
-      <motion.div
-        initial={{ opacity: 0, y: 15 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.15, duration: 0.4 }}
-        className="relative w-full rounded-[30px] sm:rounded-[36px] bg-gradient-to-r from-[#ece4f8] via-[#f7f2fd] to-[#eae0f8] dark:from-[#1b143f] dark:via-[#261754] dark:to-[#170e37] border border-purple-200/80 dark:border-purple-800/40 p-5 sm:p-6 shadow-sm overflow-hidden flex flex-col md:flex-row items-center justify-between gap-5"
-      >
-        {/* Right in RTL (FIRST in RTL flex): Solid Purple Button */}
-        <div className="flex items-center gap-3 shrink-0">
-          <button
-            onClick={() => {
-              if (onOpenStudyPlan) {
-                onOpenStudyPlan();
-              } else {
-                setShowPlanModal(true);
-              }
-            }}
-            className="px-6 py-2.5 sm:py-3 rounded-2xl bg-[#5b2b9d] hover:bg-[#4a2283] text-white font-black text-xs sm:text-sm shadow-md shadow-purple-900/20 transition active:scale-95 flex items-center gap-2"
-          >
-            <span>{isBadini || isKu ? "پلانی ڕۆژانە دروست بکە" : "Create Daily Plan"}</span>
-          </button>
-        </div>
+      {showBanner && (
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15, duration: 0.4 }}
+          className="relative w-full rounded-[30px] sm:rounded-[36px] bg-gradient-to-r from-[#ece4f8] via-[#f7f2fd] to-[#eae0f8] dark:from-[#1b143f] dark:via-[#261754] dark:to-[#170e37] border border-purple-200/80 dark:border-purple-800/40 p-5 sm:p-6 shadow-sm overflow-hidden flex flex-col md:flex-row items-center justify-between gap-5"
+        >
+          {/* Right in RTL (FIRST in RTL flex): Solid Purple Button */}
+          <div className="flex items-center gap-3 shrink-0">
+            <button
+              onClick={() => {
+                if (onOpenStudyPlan) {
+                  onOpenStudyPlan();
+                } else {
+                  setShowPlanModal(true);
+                }
+              }}
+              className="px-6 py-2.5 sm:py-3 rounded-2xl bg-[#5b2b9d] hover:bg-[#4a2283] text-white font-black text-xs sm:text-sm shadow-md shadow-purple-900/20 transition active:scale-95 flex items-center gap-2"
+            >
+              <span>{isBadini ? "+ پلانا نوو چێکە" : isKu ? "+ پلانی نوێ دروست بکە" : "+ Create Daily Plan"}</span>
+            </button>
+          </div>
 
-        {/* Center in RTL: Motivational Copy directly from Reference Image */}
-        <div className="text-center md:text-right flex-1">
-          <h3 className="text-base sm:text-lg font-black text-[#431e78] dark:text-purple-200">
-            {isBadini
-              ? "هەمرۆ چی پلانت هەیە؟"
-              : isKu
-              ? "هەمرۆ چی پلانت هەیە؟"
-              : "What is your study plan today?"}
-          </h3>
-          <p className="text-xs sm:text-sm text-purple-900/80 dark:text-purple-300/80 font-bold mt-1">
-            {isBadini || isKu
-              ? "پلانت دانێ و هەموو ڕۆژەکەت بە هەنگاوێک نزیکتر بۆ سەرکەوتن!"
-              : "Set your daily plan and take a step closer to success every single day!"}
-          </p>
-        </div>
+          {/* Center in RTL: Motivational Copy */}
+          <div className="text-center md:text-right flex-1">
+            <h3 className="text-base sm:text-lg font-black text-[#431e78] dark:text-purple-200">
+              {isBadini ? "پلانا تە یا ئەڤرۆ چیە؟" : isKu ? "پلانی ئەمڕۆت چییە؟" : "What is your study plan today?"}
+            </h3>
+            <p className="text-xs sm:text-sm text-purple-900/80 dark:text-purple-300/80 font-bold mt-1">
+              {isBadini
+                ? "پلانا خوە دابنێ و هەنگاڤ ب هەنگاڤ بەرەڤ سەرکەفتنێ بچە!"
+                : isKu
+                ? "خشتەی ڕۆژانەت دابنێ و هەنگاو بە هەنگاو بەرەو سەرکەوتن بڕۆ!"
+                : "Set your daily plan and take a step closer to success every single day!"}
+            </p>
+          </div>
 
-        {/* Left in RTL (THIRD in RTL flex): Cute Purple Mascot Peeking Out */}
-        <div className="flex-shrink-0 flex items-center justify-center">
-          <motion.div
-            animate={{ y: [0, -4, 0] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-            className="w-16 h-16 sm:w-20 sm:h-20"
-          >
-            <img
-              src={purpleMascotImg}
-              alt="Planner Mascot"
-              className="w-full h-full object-contain drop-shadow-sm"
-            />
-          </motion.div>
-        </div>
-      </motion.div>
+          {/* Left in RTL (THIRD in RTL flex): Cute Purple Mascot Peeking Out */}
+          <div className="flex-shrink-0 flex items-center justify-center">
+            <motion.div
+              animate={{ y: [0, -4, 0] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              className="w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center"
+            >
+              <img
+                src={purpleMascotImg}
+                alt="Planner Mascot"
+                className="w-full h-full object-contain drop-shadow-sm"
+              />
+            </motion.div>
+          </div>
+        </motion.div>
+      )}
 
       {/* ==================================================================== */}
       {/* 5. INTERACTIVE MODALS (Exam Countdown, Daily Plan, Achievements) */}

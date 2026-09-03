@@ -8,7 +8,7 @@ html {
   overflow-x: hidden;
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: rgba(139, 92, 246, 0.5) #090a16;
+  scrollbar-color: rgba(147, 51, 234, 0.4) #f5f2fb;
 }
 
 body {
@@ -17,7 +17,8 @@ body {
   width: 100%;
   min-height: 100vh;
   overflow: visible !important;
-  background-color: #090a16;
+  background-color: #f7f5fc;
+  color: #0f172a;
 }
 
 #root {
@@ -142,17 +143,17 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #090a16;
+  background: #f7f5fc;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(139, 92, 246, 0.5);
+  background: rgba(147, 51, 234, 0.35);
   border-radius: 9999px;
-  border: 1px solid rgba(139, 92, 246, 0.2);
+  border: 1px solid rgba(147, 51, 234, 0.15);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(168, 85, 247, 0.6);
+  background: rgba(147, 51, 234, 0.55);
 }
 
 ::-webkit-scrollbar-corner {
